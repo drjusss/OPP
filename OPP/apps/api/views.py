@@ -43,7 +43,7 @@ class AppealsApiView(View):
     def patch(self, request: HttpRequest) -> HttpResponse:
         data = json.load(request)
         id_appeals = data['ids']
-
+        pass
     def delete(self, request: HttpRequest) -> HttpResponse:
         data = json.load(request)
         id_appeals = data['ids']
