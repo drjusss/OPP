@@ -20,7 +20,7 @@ def serialize_appeal(appeal: models.Appeal) -> dict:
         'pk': appeal.pk,
         'name': appeal.name,
         'skype': appeal.skype,
-        'massage': appeal.massage,
+        'message': appeal.message,
         'headset': appeal.headset,
         'soundIsOk': appeal.sound_is_ok,
         'dateOfGroupStart': appeal.date_of_group_start,
@@ -29,3 +29,10 @@ def serialize_appeal(appeal: models.Appeal) -> dict:
         'isComplete': appeal.is_complete,
     }
 
+
+def serialize_appel_to_unauthorized_user(appeal: models.Appeal) -> dict:
+    return {
+        'name': appeal.name,
+        'skype': appeal.skype,
+        'message': appeal.message,
+    }
