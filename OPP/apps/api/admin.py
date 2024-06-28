@@ -12,7 +12,7 @@ class AugmentedUserAdmin(admin.ModelAdmin):
 
 @admin.register(models.Appeal)
 class AppealAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'name', 'skype', 'message', 'headset', 'sound_is_ok', 'date_of_group_start', 'worker', 'lead_time', 'is_complete']
+    list_display = ['pk', 'name', 'skype', 'message', 'headset', 'sound_is_ok', 'date_of_group_start', 'worker', 'lead_time', 'is_complete', 'is_deleted']
     list_display_links = ['pk', 'name']
     list_per_page = 10
     list_filter = ['is_complete', 'sound_is_ok', 'headset', 'worker']  # Фильтрация по полям

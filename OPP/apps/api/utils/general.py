@@ -6,3 +6,4 @@ def get_data_by_page(data: list[typing.Any], page_id: int, page_size: int) -> li
     stop_index = page_id * page_size
     result = data[start_index:stop_index]
     return result
+

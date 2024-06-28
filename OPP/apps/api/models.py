@@ -34,6 +34,7 @@ class Appeal(models.Model):
     worker = models.ForeignKey(to=AugmentedUser, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Кто выполняет')
     lead_time = models.PositiveIntegerField(null=True, blank=True, verbose_name='Время выполнения')
     is_complete = models.BooleanField(default=False, verbose_name='Завершено')
+    is_deleted = models.BooleanField(default=False, verbose_name='Удалено')
 
     class Meta:
         verbose_name = 'Обращение'
