@@ -9,13 +9,20 @@ HEADSET_CHOICES = [
     ('3.5/USB', 'USB наушники и 3.5 микрофон'),
 ]
 
+TYPE_CHOICES = [
+    ('check', 'Проверка'),
+    ('incident','Инцидент'),
+]
+
 
 class AugmentedUser(models.Model):
     objects = models.Manager()
+    name = models.CharField(max_length=50, verbose_name='Имя инженера')
     user = models.OneToOneField(to=User, on_delete=models.PROTECT, verbose_name='Встроенный пользователь')  # PROTECT - чтобы нельзя было удалить
-    email = models.CharField(max_length=30, verbose_name='Почта')
+    email = models.CharField(max_length=30, unique=True, verbose_name='Почта')
     amount_completed_tasks = models.PositiveIntegerField(default=0, verbose_name='Количество выполненных обращений')
     amount_running_tasks = models.PositiveIntegerField(default=0, verbose_name='Количество текущих обращений')
+    token = models.CharField(null=True, blank=True, unique=True, max_length=16, verbose_name='Токен')
 
     class Meta:
         verbose_name = 'Расширенный пользователь'
@@ -28,13 +35,19 @@ class Appeal(models.Model):
     name = models.CharField(max_length=60, verbose_name='ФИО ученика')
     skype = models.CharField(max_length=45, verbose_name='Скайп ученика')
     message = models.CharField(max_length=1000, verbose_name='Обращение')
-    headset = models.CharField(max_length=10, choices=HEADSET_CHOICES, null=True, blank=True,  verbose_name='Гарнитура\микрофон')
+    headset = models.CharField(max_length=10, choices=HEADSET_CHOICES, null=True, blank=True, verbose_name='Гарнитура\микрофон')
+    appeal_type = models.CharField(max_length=10, choices=TYPE_CHOICES, null=True, blank=True, verbose_name='Тип обращения')
     sound_is_ok = models.BooleanField(null=True, verbose_name='Звук ученика')
     date_of_group_start = models.DateField(null=True, blank=True, verbose_name='Дата старта группы')
     worker = models.ForeignKey(to=AugmentedUser, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Кто выполняет')
     lead_time = models.PositiveIntegerField(null=True, blank=True, verbose_name='Время выполнения')
-    is_complete = models.BooleanField(default=False, verbose_name='Завершено')
+    speed_test = models.CharField(max_length=15, null=True, blank=True, verbose_name='Тест скорости')
+    speed_test_note = models.CharField(max_length=200, null=True, blank=True, verbose_name='Комментарий к тесту скорости')
+    student_note = models.CharField(max_length=500, null=True, blank=True, verbose_name='Комментарий к ученику')
+    camera = models.BooleanField(null=True, blank=True, verbose_name='Камера')
+    is_completed = models.BooleanField(default=False, verbose_name='Завершено')
     is_deleted = models.BooleanField(default=False, verbose_name='Удалено')
+    is_spam = models.BooleanField(default=False, verbose_name='Спам')
 
     class Meta:
         verbose_name = 'Обращение'
