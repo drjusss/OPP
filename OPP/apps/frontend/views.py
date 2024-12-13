@@ -47,3 +47,10 @@ def sign_out(request: HttpRequest) -> HttpResponse:
         request=request,
         template_name='sign-out.html'
     )
+
+
+def dashboard(request: HttpRequest) -> HttpResponse:
+    return render(
+        request=request,
+        template_name='dashboard.html'
+    )

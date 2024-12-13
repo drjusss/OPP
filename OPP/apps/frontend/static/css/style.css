@@ -15,6 +15,44 @@ p {
     padding: 0;
 }
 
+th {
+    font-weight: 400;
+}
+
+.table {
+    border-spacing: inherit;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+}
+
+.table thead {
+    background-color: #eee;
+}
+
+.table thead tr th {
+    border-width: 0;
+    padding: 1rem 1rem;
+    border: 0.1rem solid #c6c6c6;
+}
+
+.table thead tr th:first-child {
+	border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.table thead tr th:last-child {
+	border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #eee;
+}
+
+.table tbody tr td {
+    padding: 0.75rem 1rem;
+    border: 0.1rem solid #c6c6c6;
+}
+
 .text-5 {
     font-size: 1.25rem;
 }
@@ -90,6 +128,10 @@ p {
 
 .h-8 {
     height: 2rem;
+}
+
+.h-6 {
+    height: 1.5rem;
 }
 
 .mb-6 {
@@ -178,8 +220,12 @@ p {
     color: #474747;
 }
 
+.flex-items-inline-flex {
+    display: inline-flex;
+}
+
 .appeal-card-large {
-    max-height: 80vh;
+    max-height: 90vh;
     background-color: #eee;
     border-radius: 1rem;
     padding: 1.5rem 1rem;
@@ -275,6 +321,7 @@ p {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
+    margin-left: 22.5rem;
 }
 
 #search-field {
@@ -290,17 +337,6 @@ p {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-}
-
-#header {
-    padding: 1rem;
-    background-color: #eeeeee;
-    border-radius: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 3rem;
-    border: 2px solid gray;
 }
 
 #logo {
@@ -321,11 +357,12 @@ p {
     color: white;
 }
 
-#filter-fixik, #appeal-type, #only-complete, #appeal-card-headset, #appeal-card-sound-is-ok, #appeal-card-date-of-start, #appeal-card-camera, #appeal-card-speed-test, #appeal-card-speed-test-comment, #appeal-card-speed-test-comment, #appeal-card-student-comment, #appeal-card-type {
+#filter-fixik, #appeal-type, #only-complete, #appeal-card-headset, #appeal-card-sound-is-ok, #appeal-card-date-of-start, #appeal-card-camera, #appeal-card-speed-test, #appeal-card-speed-test-comment, #appeal-card-student-comment, #appeal-card-type, #appeal-card-time-to-complete, #appeal-card-speed-test-comment, #appeal-card-type-of-connection {
     border-radius: 0.5rem;
     padding: 0.5rem;
     height: 2.5rem;
 }
+
 
 #appeal-list {
     display: grid;
@@ -467,7 +504,7 @@ p {
     max-height: 15rem;
 }
 
-#appeal-card-date-of-start, #appeal-card-speed-test {
+#appeal-card-date-of-start, #appeal-card-speed-test, #appeal-card-time-to-complete, #appeal-card-type-of-connection {
     border: 1px solid grey;
     display: block;
     box-sizing: border-box;
@@ -500,4 +537,13 @@ p {
     border-radius: 0.5rem;
     padding: 0.25rem;
     cursor: pointer;
+}
+
+#export-button {
+    border: 1px solid gray;
+    border-radius: 0.5rem;
+    max-height: 7rem;
+    align-self: center;
+    padding: 1rem;
+    margin-left: 5rem;
 }

@@ -1,9 +1,15 @@
 import datetime
 import json
+import csv
+import os.path
+import uuid
+from wsgiref.util import FileWrapper
 
 from django.views import View
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse, FileResponse
 from django.utils.decorators import method_decorator
+from django.db.models import Q
+from django.http.request import QueryDict
 
 from apps.api.utils.model import appeal as appeal_utils, augmented_user as augmented_user_utils
 from apps.api.utils import general as general_utils, serializers, decorators, validators
@@ -86,8 +92,14 @@ class AppealApiView(View):
         worker_id = data.get('worker_id')
         to_complete = data.get('to_complete')
         camera = data.get('camera')
-        appeal_type = data.get('appeal_type')
+        type = data.get('type')
+        connection_type = data.get('connection_type')
+        time_to_complete = data.get('time_to_complete')
+        speed_test = data.get('speed_test')
+        speed_test_note = data.get('speed_test_note')
+        student_note = data.get('student_note')
 
+        print(speed_test)
         worker = augmented_user_utils.get(pk=worker_id)
         if worker is None:
             return JsonResponse(data={'error': ' The worker does not exist.'}, status=404)
@@ -103,7 +115,12 @@ class AppealApiView(View):
             worker=worker,
             to_complete=to_complete,
             camera=camera,
-            appeal_type=appeal_type,
+            type=type,
+            connection_type=connection_type,
+            time_to_complete=time_to_complete,
+            speed_test=speed_test,
+            speed_test_note=speed_test_note,
+            student_note=student_note,
         )
         return JsonResponse(data={'result': 'The appeal was successfully updated.'}, status=200)
 
@@ -122,23 +139,6 @@ class AppealApiView(View):
         return JsonResponse(data={'result': 'The appeal was successfully updated.'}, status=200)
 
 
-@method_decorator(name='put', decorator=decorators.check_authorized_decorator)
-@method_decorator(name='delete', decorator=decorators.check_authorized_decorator)
-class AppealForAugmentedUserView(View):
-    def put(self, request: HttpRequest, data: dict | list, appeal: models.Appeal) -> JsonResponse:
-        augmented_user = augmented_user_utils.get(user=request.user)
-
-        appeal_utils.update(appeal=appeal, headset=None, sound_is_ok=None, date_of_group_start=None, worker=augmented_user)
-        return JsonResponse(data={'result': 'The worker was successfully updated.'}, status=200)
-
-    def delete(self, request: HttpRequest, data: dict | list, appeal: models.Appeal) -> JsonResponse:
-        augmented_user = augmented_user_utils.get(user=request.user)
-        if augmented_user != appeal.worker:
-            return JsonResponse(data={'result': 'Object does not exist.'}, status=404)
-        # appeal_utils.update(appeal=appeal, headset=None, sound_is_ok=None, date_of_group_start=None, worker=None)
-        return JsonResponse(data={'result': 'The worker was successfully deleted.'}, status=200)
-
-
 class FixiksApiView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
         fixiks_obj = models.AugmentedUser.objects.all()
@@ -146,5 +146,92 @@ class FixiksApiView(View):
 
         return JsonResponse(data=response_data, safe=False, status=200)
 
+
+@method_decorator(name='get', decorator=decorators.check_authorized_decorator)
+@method_decorator(name='get', decorator=decorators.validate_get_request_to_export_appeals(query_params_validation_func=validators.validate_query_dict_to_export_appeals, data_validation_func=validators.validate_data_to_export_appeals))
+class ExportAppealsToCSVView(View):
+    def get(self, request: HttpRequest) -> FileResponse:
+        os_type = request.GET.get('os', 'windows')
+
+        is_completed_filter_value = request.GET.get('is-completed')
+        worker_id_filter_value = request.GET.get('worker-id')
+        appeal_type_filter_value = request.GET.get('appeal-type')
+        appeal_date_filter_value = request.GET.get('appeal-date')
+        search_filter_value = request.GET.get('search')
+
+        if os_type == 'windows':
+            os_type_encoding = 'windows-1251'
+        else:
+            os_type_encoding = 'utf-8'
+
+        now = datetime.datetime.now()
+        verbose_now = datetime.datetime.strftime(now, format='%d.%m.%Y %H.%M.%S')
+        file_name = f'./export/{verbose_now}.csv'
+
+        with open(file=file_name, mode='w', encoding=os_type_encoding) as file:
+            writer = csv.writer(file, delimiter=';')
+            headers = ['Имя', 'Скайп', 'Гарнитура', 'Тип подключения', 'Звук', 'Камера', 'Скорость инета/пинг', 'Дата старта', 'Кто сделал']
+            writer.writerow(headers)
+            appeals = models.Appeal.objects.filter(is_spam=False, is_deleted=False)
+
+            if is_completed_filter_value is not None:
+                is_completed = is_completed_filter_value.lower() == 'true'
+                appeals = appeals.filter(is_completed=is_completed)
+
+            if worker_id_filter_value is not None:
+                worker_pk = int(worker_id_filter_value)
+                appeals = appeals.filter(worker__pk=worker_pk)
+
+            if appeal_date_filter_value is not None:
+                appeal_date = datetime.datetime.strptime(appeal_date_filter_value, '%Y-%m-%d').date()
+                appeals = appeals.filter(date_of_group_start=appeal_date)
+
+            if appeal_type_filter_value is not None:
+                appeals = appeals.filter(type=appeal_type_filter_value)
+
+            if search_filter_value is not None:
+                search_filter_value = search_filter_value.lower()
+                # appeals_by_pk = appeals.filter(pk__icontains=search_filter_value)
+                # appeals_by_name = appeals.filter(name__icontains=search_filter_value)
+                # appeals_by_skype = appeals.filter(skype__icontains=search_filter_value)
+                # appeals_by_message = appeals.filter(message__icontains=search_filter_value)
+
+                # appeals = appeals.filter(Q(pk__icontains=search_filter_value) | Q(name__icontains=search_filter_value) | Q(skype__icontains=search_filter_value) | Q(message__icontains=search_filter_value))
+                appeals = appeals.filter(pk__icontains=search_filter_value) | appeals.filter(name__icontains=search_filter_value) | appeals.filter(skype__icontains=search_filter_value) | appeals.filter(message__icontains=search_filter_value)
+
+            for appeal in appeals:
+                writer.writerow([appeal.name, appeal.skype, appeal.headset, appeal.type_of_connection, appeal.headset, appeal.camera, appeal.speed_test, appeal.date_of_group_start, appeal.worker.name])
+
+        response = FileResponse(open(file=file_name, mode='rb'))  # as_attachment чтобы дать понять что мы отправляем файл, который нужно скачать
+
+        # with open(file=file_name, mode='rb') as file:
+            # file_content = FileWrapper(file) # content_type - нужен чтобы передать фронту формат данных
+        # response['content-disposition'] = f'attachment; filename={verbose_now}.csv'  # Именуем файл через такой способ
+            # response['content-length'] = os.path.getsize(file_name)  # Принимаем путь до файла и возвращае5м его размер
+
+        return response
+
+
+#TODO: поделать что-то с фронтендом
 #TODO:
-#TODO:
+
+# https://flowbite.com/docs/components/alerts/ - алерты, если они у нас где-то останутся
+# https://flowbite.com/docs/components/buttons/ - кнопки, возможно стоит взять готовый вариант с ховерами и везде где есть - заменить
+# https://flowbite.com/docs/components/card/ - карта регистрации и возможно вариант для карточек?
+# https://flowbite.com/docs/components/datepicker/ - красивый календарь
+# https://flowbite.com/docs/components/dropdowns/ - для селектов?
+# https://flowbite.com/docs/components/forms/ - или это для регистрации?
+# https://flowbite.com/docs/components/modal/ - или это вариант для карточки?
+# https://flowbite.com/docs/components/pagination/ - пагинация, она же будет?
+# https://flowbite.com/docs/components/tables/ - однозначно на замену таблицы из 2005
+# https://flowbite.com/docs/components/tabs/ - возможно для будушего чтобы переходить в дашборд и профиль
+# https://flowbite.com/docs/components/toast/ - типо алерта только успешного?
+# https://flowbite.com/docs/forms/input-field/ - красивые инпуты
+# https://flowbite.com/docs/forms/search-input/ - инпут для поиска?
+# https://flowbite.com/docs/forms/select/ - красивые селекты
+# https://flowbite.com/docs/forms/textarea/ - красивая textarea
+# https://flowbite.com/docs/forms/checkbox/ - у нас всего 1 чекбокс но мб понадобится
+# https://flowbite.com/docs/forms/floating-label/ - движущиеся лейблы, выглядит неплохо
+# https://flowbite.com/docs/plugins/datatables/ - понравились фильтры для таблицы
+
+# https://flowbite.com/docs/customize/dark-mode/ - очень бы хотелось иметь темную тему...

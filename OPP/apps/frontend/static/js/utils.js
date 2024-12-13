@@ -67,3 +67,16 @@ function convertDateFormat(dateString) {
     const result = `${day}.${month}.${year}`
     return result
 }
+
+function getVerboseNow() {
+    const now = new Date();
+    const year = String(now.getFullYear());
+    const month = String(now.getMonth() + 1).padStart(2, '0');  // padStart - метод строк, который добавляет нужное количество символов (1 значние) и заполняет их из 2 значения
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    const result = `${day}-${month}-${year} ${hours}-${minutes}-${seconds}`
+    return result
+}

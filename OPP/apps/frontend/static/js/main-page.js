@@ -1,8 +1,8 @@
-function sendRequestToCreateAppeal(event) {
+function getValuesToCreateAppeal() {
     event.preventDefault()
-    const nameInput = document.querySelector('#user-name')
-    const skypeInput = document.querySelector('#skype')
-    const messageInput = document.querySelector('#appeal-content')
+    const nameInput = document.querySelector('#user-name');
+    const skypeInput = document.querySelector('#skype');
+    const messageInput = document.querySelector('#appeal-content');
 
     const name = nameInput.value;
     const skype = skypeInput.value;
@@ -12,41 +12,31 @@ function sendRequestToCreateAppeal(event) {
         console.log('Validation Failed')
         return
     }
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({
-            name: name,
-            skype: skype,
-            message: message,
-        })
-    };
-
-    //event.target возвращается то, на чем произошло событие
-
-    fetch(`${domain}/api/appeals/`, options)
-    .then(response => {
-        return response.json()
-    })
-    .then(data => {
-        if (data.result == 'New appeal successfully has been created!') {
-            showModalWindow()
-            clearInputValues()
-        } else {
-            alert('Ошибка валидации')
-        }
-    })
-    .catch(error => {
-        console.error(error.stack);
-    })
+    return {
+        name: name,
+        skype: skype,
+        message: message,
+    }
 }
 
 function addSubmitFormHandler() {
     const sendAppealForm = document.querySelector('#send-appeal-form');
-    sendAppealForm.addEventListener('submit', sendRequestToCreateAppeal);
+    sendAppealForm.addEventListener('submit', () => {
+        const dataToCreateAppeal = getValuesToCreateAppeal()
+
+        if (!dataToCreateAppeal) {
+            return
+        }
+
+        sendRequestToCreateAppeal(
+            () => {
+                showModalWindow()
+                clearInputValues()
+            },
+            () => {alert('Ошибка валидации')},
+            dataToCreateAppeal,
+        )
+    });
 }
 
 function validateAppealContent(nameInput, skypeInput, messageInput) {

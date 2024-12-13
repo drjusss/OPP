@@ -36,7 +36,9 @@ def serialize_appeal(appeal: models.Appeal) -> dict:
         'speed_test': appeal.speed_test,
         'speed_test_note': appeal.speed_test_note,
         'student_note': appeal.student_note,
-        'appeal_type': appeal.appeal_type,
+        'type': appeal.type,
+        'type_of_connection': appeal.type_of_connection,
+        'time_to_complete': appeal.time_to_complete,
     }
 
 

@@ -1,40 +1,3 @@
-function sendRequestToSignIn() {
-    const userName = document.querySelector('#user-name').value;
-    const password = document.querySelector('#password').value;
-    const errorMessage = document.querySelector('p');
-    errorMessage.textContent = '';
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken')  // Обязательно необходимо отправлять csrftoken, если бэк на джанго.
-        },
-        body: JSON.stringify({
-            username: userName,
-            password: password,
-        })
-    };
-
-    fetch(`${domain}/api/auth/sign-in/`, options)
-    .then(response => {
-        return response.json()
-    })
-    .then(data => {
-        if (data.result == 'Invalid credentials.') {
-            errorMessage.textContent = 'Логин и пароль неверные.'
-            showErrorLog()
-
-        } else if (data.result == 'Successfully sign in.') {
-            alert('Вы вошли в систему.');
-            window.location.href = `${domain}/appeals`;
-        }
-    })
-    .catch(error => {
-        console.error(error.stack);
-
-    })
-}
-
 function addClickButtonHandler() {
     const button = document.querySelector('#sign-in-button');
     button.addEventListener('click', sendRequestToSignIn);
@@ -43,11 +6,32 @@ function addClickButtonHandler() {
 function formSubmitHandler(event) {
     event.preventDefault();
     const dataIsValid = validateSignIn();
-    if (!dataIsValid) {
-        return
-    };
+    if (!dataIsValid) {return};
 
-    sendRequestToSignIn();
+    const signInValues = getValuesToSignIn()
+    if (!signInValues) {return};
+
+    sendRequestToSignIn(
+        () => {
+            alert('Вы вошли в систему.');
+            window.location.href = `${domain}/appeals`;
+        },
+        () => {
+            errorMessage.textContent = 'Логин и пароль неверные.'
+            showErrorLog()
+        },
+        signInValues,
+    )
+}
+
+function getValuesToSignIn() {
+    const userName = document.querySelector('#user-name').value;
+    const password = document.querySelector('#password').value;
+
+    return {
+        userName: userName,
+        password: password,
+    }
 }
 
 function addFormSubmitHandler() {
@@ -93,5 +77,3 @@ addFormSubmitHandler()
 addShowPasswordHandler()
 addHidePasswordHandler()
 addInputHandler()
-
-//addClickButtonHandler()

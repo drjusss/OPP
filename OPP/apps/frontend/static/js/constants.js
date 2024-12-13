@@ -44,6 +44,97 @@ const appealCardHtmlTemplate = `
     </div>
 `
 
+//const appealDetailWindowHTMLTemplate = `
+//    <div style="top: 0; right: 0; bottom: 0; left: 0; background-color: rgb(107 114 128); position: fixed; z-index: 10; opacity: 50%;"></div>
+//    <div style="height: 100%; width: 100%; position: fixed; top: 0; right: 0; left: 0; z-index: 20; display: flex; align-items: center; justify-content: center;">
+//        <div id="appeal">
+//            <div class="appeal-card-large overflow-y-scroll">
+//                <div class="justify-between flex-items-center mb-4 text-5">
+//                    <div id="appeal-card-id">{{ appeal_id }}</div>
+//                    <div>
+//                        <select name="fixik" id="appeal-card-fixik-choice" class="text-5 border-gray br-2"></select>
+//                    </div>
+//                    <div class="check-box">
+//                        <button id="is-spam-button" type="button" class="text-5 w-100">Спам</button>
+//                    </div>
+//                    <div class="check-box">
+//                        <label for="appeal-card-is-complete" class="appeal-card-label mr-2">Выполненные</label>
+//                        <input type="checkbox" id="appeal-card-is-complete" class="w-8 h-8">
+//                    </div>
+//                </div>
+//                <div class="appeal-card-body">
+//                    <div class="appeal-card-option">
+//                        <span class="appeal-card-label">ФИО ученика</span>
+//                        <p id="appeal-card-name" class="appeal-item bg-read-only-input">{{ student_name }}</p>
+//                    </div>
+//                    <div class="appeal-card-option">
+//                        <span class="appeal-card-label">Скайп ученика</span>
+//                        <p id="appeal-card-skype" class="appeal-item bg-read-only-input">{{ skype }}</p>
+//                    </div>
+//                    <div class="appeal-card-option">
+//                        <span class="appeal-card-label">Текст обращения</span>
+//                        <p id="appeal-card-content" class="appeal-item bg-read-only-input">{{ message }}</p>
+//                    </div>
+//                    <div class="flex justify-between items-end gap-4">
+//                        <div class="appeal-card-option flex-1">
+//                            <label for="appeal-card-headset" class="appeal-card-label">Гарнитура</label>
+//                            <select name="headset" id="appeal-card-headset" class="text-5 border-gray">
+//                                <option value="USB">USB</option>
+//                                <option value="3.5">3.5</option>
+//                                <option value="USB/3.5">USB/3.5</option>
+//                                <option value="3.5/USB">3.5/USB</option>
+//                            </select>
+//                        </div>
+//                        <div class="appeal-card-option flex-1">
+//                            <label for="appeal-card-sound-is-ok" class="appeal-card-label">Звук</label>
+//                            <select name="sound-is-ok" id="appeal-card-sound-is-ok" class="text-5 border-gray">
+//                                <option value="true">ОК</option>
+//                                <option value="false">Не ОК</option>
+//                            </select>
+//                        </div>
+//                        <div class="appeal-card-option flex-1">
+//                            <label for="appeal-card-date-of-start" class="appeal-card-label">Дата старта</label>
+//                            <input id="appeal-card-date-of-start" type="date" class="text-5 border-gray">
+//                        </div>
+//                    </div>
+//                    <div class="flex-items-center justify-between gap-4">
+//                        <div class="appeal-card-option flex-1">
+//                            <label for="appeal-card-camera" class="appeal-card-label">Наличие камеры</label>
+//                            <select name="camera" id="appeal-card-camera" class="text-5 border-gray">
+//                                <option value="true">OK</option>
+//                                <option value="false">Не ОК</option>
+//                            </select>
+//                        </div>
+//                        <div class="appeal-card-option flex-1">
+//                            <label for="appeal-card-type" class="appeal-card-label">Тип обращения</label>
+//                            <select name="type" id="appeal-card-type" class="text-5 border-gray">
+//                                <option value="check">Проверка</option>
+//                                <option value="incident">Инцидент</option>
+//                            </select>
+//                        </div>
+//                        <div class="appeal-card-option flex-1">
+//                            <label for="appeal-card-speed-test" class="appeal-card-label">Тест скорости</label>
+//                            <input  id="appeal-card-speed-test" type="text" class="text-5 border-gray">
+//                        </div>
+//                    </div>
+//                    <div class="appeal-card-option">
+//                        <label for="appeal-card-speed-test-comment" class="appeal-card-label">Комментарий к тесту</label>
+//                        <textarea id="appeal-card-speed-test-comment" class="text-5 border-gray" rows="2"></textarea>
+//                    </div>
+//                    <div class="appeal-card-option">
+//                        <label for="appeal-card-student-comment" class="appeal-card-label">Комментарий к ученику</label>
+//                        <textarea id="appeal-card-student-comment" class="text-5 border-gray" rows="2"></textarea>
+//                    </div>
+//                    <div class="flex-items-center justify-between gap-4">
+//                        <button id="save-button" type="button" class="text-5 w-100">Сохранить</button>
+//                        <button id="not-save-button" type="button" class="text-5 w-100">Не сохранять</button>
+//                    </div>
+//                </div>
+//            </div>
+//        </div>
+//    </div>
+//`
+
 const appealDetailWindowHTMLTemplate = `
     <div style="top: 0; right: 0; bottom: 0; left: 0; background-color: rgb(107 114 128); position: fixed; z-index: 10; opacity: 50%;"></div>
     <div style="height: 100%; width: 100%; position: fixed; top: 0; right: 0; left: 0; z-index: 20; display: flex; align-items: center; justify-content: center;">
@@ -113,13 +204,26 @@ const appealDetailWindowHTMLTemplate = `
                             </select>
                         </div>
                         <div class="appeal-card-option flex-1">
+                            <label for="appeal-card-time-to-complete" class="appeal-card-label">Время на выполненние</label>
+                            <input  id="appeal-card-time-to-complete" type="text" class="text-5 border-gray">
+                        </div>
+                    </div>
+                    <div class="flex-items-center justify-between gap-4">
+                        <div class="appeal-card-option flex-1">
                             <label for="appeal-card-speed-test" class="appeal-card-label">Тест скорости</label>
                             <input  id="appeal-card-speed-test" type="text" class="text-5 border-gray">
+                        </div>
+                        <div class="appeal-card-option flex-1">
+                            <label for="appeal-card-type-of-connection" class="appeal-card-label">Тип подключения</label>
+                            <select name="type-of-connection" id="appeal-card-type-of-connection" class="text-5 border-gray">
+                                <option value="wi-fi">wi-fi</option>
+                                <option value="cable">Кабель</option>
+                            </select>
                         </div>
                     </div>
                     <div class="appeal-card-option">
                         <label for="appeal-card-speed-test-comment" class="appeal-card-label">Комментарий к тесту</label>
-                        <textarea id="appeal-card-speed-test-comment" class="text-5 border-gray" rows="2"></textarea>
+                        <textarea id="appeal-card-speed-test-comment" class="text-5 border-gray h-6" rows="2"></textarea>
                     </div>
                     <div class="appeal-card-option">
                         <label for="appeal-card-student-comment" class="appeal-card-label">Комментарий к ученику</label>
@@ -181,6 +285,19 @@ const spamModalWindowHTMLTemplate = `
             </div>
         </div>
     </div>
+`
+
+const dashboardHTMLTemplate = `
+    <td>{{ name }}</td>
+    <td>{{ skype }}</td>
+    <td>{{ headset }}</td>
+    <td>{{ type_of_connection }}</td>
+    <td>{{ sound_is_ok }}</td>
+    <td>{{ camera }}</td>
+    <td>{{ speed_test }}</td>
+    <td>{{ date_of_group_start }}</td>
+    <td>{{ worker }}</td>
+    <td>{{ time_to_complete }}</td>
 `
 
 const appealCompletionIcons = {

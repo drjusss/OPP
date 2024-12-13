@@ -2,6 +2,7 @@ import datetime
 import re
 
 from django.http import JsonResponse
+from django.http.request import QueryDict
 
 from apps.api import models
 
@@ -135,8 +136,8 @@ def validate_json_to_update_appeal(data: list | dict) -> tuple[bool, str]:
     if not isinstance(data, dict):
         return False, 'Data must be dict type.'
 
-    if set(data.keys()) != {'headset', 'sound_is_ok', 'date_of_group_start', 'worker_id', 'to_complete', 'camera', 'appeal_type'}:
-        return False, 'Data must contain (skype, headset, sound_is_ok, date_of_group_start, worker_id, to_complete, camera, appeal_type) keys'
+    if set(data.keys()) != {'headset', 'sound_is_ok', 'date_of_group_start', 'worker_id', 'to_complete', 'camera', 'type', 'connection_type', 'time_to_complete', 'speed_test', 'speed_test_note', 'student_note'}:
+        return False, 'Data must contain (skype, headset, sound_is_ok, date_of_group_start, worker_id, to_complete, camera, type, connection_type, time_to_complete, speed_test, speed_test_note, student_note) keys'
 
     if data['headset'] is not None and data['headset'] not in headset_value_choices:
         return False, f'Data must have "headset" key with value 1 of {headset_value_choices}.'
@@ -173,7 +174,12 @@ def validate_data_to_update_appeal(
     appeal: models.Appeal | None = None,
     to_complete: bool | None = None,
     camera: bool | None = None,
-    appeal_type: str | None = None,
+    type: str | None = None,
+    connection_type: str | None = None,
+    time_to_complete: str | None = None,
+    speed_test: str | None = None,
+    speed_test_note: str | None = None,
+    student_note: str | None = None,
 ) -> tuple[bool, str]:
     if date_of_group_start is not None:
         date_of_group_start = datetime.datetime.strptime(date_of_group_start, '%d.%m.%Y')
@@ -297,6 +303,37 @@ def validate_json_for_employee_assignment(data: dict | list) -> tuple[bool, str]
 
 
 def validate_data_to_employee_assignment(data: dict | list) -> tuple[bool, str]:
+    return True, str()
+
+
+def validate_query_dict_to_export_appeals(data: QueryDict) -> tuple[bool, str]:
+    return True, str()
+
+
+def validate_data_to_export_appeals(data: QueryDict) -> tuple[bool, str]:
+
+    is_completed = data.get('is-completed')
+    if is_completed is not None and is_completed.lower() not in ['true', 'false']:
+        return False, 'is-completed must be bool type.'
+
+    worker_id = data.get('worker-id')
+    if worker_id is not None:
+        try:
+            int(worker_id)
+        except ValueError:
+            return False, 'worker-id must be int type'
+
+    appeal_type = data.get('type')
+    if appeal_type is not None and appeal_type not in ['incident', 'check']:
+        return False, 'Type must be incident or check.'
+
+    date_of_group_start = data.get('date-of-group-start')
+    if date_of_group_start is not None:
+        try:
+            datetime.datetime.strptime(date_of_group_start, '%Y-%m-%d').date()
+        except (ValueError, TypeError):
+            return False, 'date-of-group-start value must be in date format YYYY-mm-dd'
+
     return True, str()
 
 #TODO

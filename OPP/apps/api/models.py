@@ -14,6 +14,11 @@ TYPE_CHOICES = [
     ('incident','Инцидент'),
 ]
 
+TYPE_OF_CONNECTION = [
+    ('wi-fi', 'wi-fi'),
+    ('cable', 'кабель'),
+]
+
 
 class AugmentedUser(models.Model):
     objects = models.Manager()
@@ -36,7 +41,8 @@ class Appeal(models.Model):
     skype = models.CharField(max_length=45, verbose_name='Скайп ученика')
     message = models.CharField(max_length=1000, verbose_name='Обращение')
     headset = models.CharField(max_length=10, choices=HEADSET_CHOICES, null=True, blank=True, verbose_name='Гарнитура\микрофон')
-    appeal_type = models.CharField(max_length=10, choices=TYPE_CHOICES, null=True, blank=True, verbose_name='Тип обращения')
+    type = models.CharField(max_length=10, choices=TYPE_CHOICES, null=True, blank=True, verbose_name='Тип обращения')
+    type_of_connection = models.CharField(max_length=10, choices=TYPE_OF_CONNECTION, null=True, blank=True, verbose_name='Тип подключения')
     sound_is_ok = models.BooleanField(null=True, verbose_name='Звук ученика')
     date_of_group_start = models.DateField(null=True, blank=True, verbose_name='Дата старта группы')
     worker = models.ForeignKey(to=AugmentedUser, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Кто выполняет')
@@ -45,6 +51,7 @@ class Appeal(models.Model):
     speed_test_note = models.CharField(max_length=200, null=True, blank=True, verbose_name='Комментарий к тесту скорости')
     student_note = models.CharField(max_length=500, null=True, blank=True, verbose_name='Комментарий к ученику')
     camera = models.BooleanField(null=True, blank=True, verbose_name='Камера')
+    time_to_complete = models.CharField(max_length=10, null=True, blank=True, verbose_name='Время на проверку')
     is_completed = models.BooleanField(default=False, verbose_name='Завершено')
     is_deleted = models.BooleanField(default=False, verbose_name='Удалено')
     is_spam = models.BooleanField(default=False, verbose_name='Спам')

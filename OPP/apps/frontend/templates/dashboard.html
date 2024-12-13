@@ -1,0 +1,38 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href='{% static "css/style.css" %}'>
+    <title>Дашборд ученики</title>
+</head>
+<body>
+    <div class="main-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Скайп</th>
+                <th>Гарнитура</th>
+                <th>Wi-fi/Кабель</th>
+                <th>Звук WDE</th>
+                <th>Наличие камеры</th>
+                <th>Скорость инета/пинг</th>
+                <th>Дата старта группы</th>
+                <th>Кто сделал</th>
+                <th>Время на проверку</th>
+            </tr>
+            </thead>
+            <tbody id="appeal-table-body"></tbody>
+        </table>
+    </div>
+    <script src="{% static 'js/api.js' %}"></script>
+    <script src="{% static 'js/constants.js' %}"></script>
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+
+</body>
+</html>

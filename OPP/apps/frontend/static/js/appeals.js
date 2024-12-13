@@ -1,6 +1,5 @@
 let filteredAppeals = [];
 
-
 function filterAppeals() {
     filteredAppeals = structuredClone(appeals);  //глубокая копия (чтобы можно было менять без изменения изначального объекта)
 
@@ -18,7 +17,7 @@ function filterAppeals() {
         filteredAppeals = filteredAppeals.filter(appeal => appeal.worker && appeal.worker.id == Number(filterWorker));
     }
     if (filterAppealType != 'any') {
-        filteredAppeals = filteredAppeals.filter(appeal => appeal.appeal_type == filterAppealType);
+        filteredAppeals = filteredAppeals.filter(appeal => appeal.type == filterAppealType);
     }
     if (filterAppealDate != '') {
         filteredAppeals = filteredAppeals.filter(appeal => appeal.date_of_group_start == filterAppealDate);
@@ -33,6 +32,35 @@ function filterAppeals() {
     console.log(filteredAppeals)
     displayAppeals(filteredAppeals);
 }
+
+function filterAppealsToExport() {
+    let filterWorkerId = document.querySelector('#filter-fixik').value || null;
+    let filterAppealType = document.querySelector('#appeal-type').value || null;
+    let isCompleted = document.querySelector('#only-complete').value || null;
+    const filterAppealDate = document.querySelector('#filter-date-input').value || null;
+    const filterSearch = document.querySelector('#search-field').value.toLowerCase() || null;
+
+    if (filterWorkerId == 'any') {
+        filterWorkerId = null;
+    }
+
+    if (filterAppealType == 'any') {
+        filterAppealType = null;
+    }
+
+    if (isCompleted == 'any') {
+        isCompleted = null;
+    }
+
+    return {
+        isCompleted: isCompleted,
+        workerId: filterWorkerId,
+        appealType: filterAppealType,
+        appealDate: filterAppealDate,
+        search: filterSearch,
+    }
+}
+
 
 function addFilterHandler() {
     const onlyCompleted = document.querySelector('#only-complete');
@@ -106,7 +134,7 @@ function displayAppeals(appealsData) {
     addOpenAppealCardHandler()
 }
 
-function validateUpdateAppealData(headsetInput, soundIsOkInput, dateOfGroupStartInput, workerIdInput, cameraInput, isCompletedCheckBox, appealTypeSelect) {
+function validateUpdateAppealData(headsetInput, soundIsOkInput, dateOfGroupStartInput, workerIdInput, cameraInput, isCompletedCheckBox, appealTypeSelect, timeToCompleteInput, connectionTypeInput) {
     if (isCompletedCheckBox.checked) {
         if (!headsetInput.value) {
             headsetInput.setCustomValidity('Поле гарнитуры должно быть заполнено до закрытия обращения.');
@@ -136,6 +164,16 @@ function validateUpdateAppealData(headsetInput, soundIsOkInput, dateOfGroupStart
         if (!appealTypeSelect.value) {
             appealTypeSelect.setCustomValidity('Поле типа обращения должно быть заполнено до закрытия обращения.');
             appealTypeSelect.reportValidity();
+            return false
+        }
+        if (!timeToCompleteInput.value) {
+            timeToCompleteInput.setCustomValidity('Поле время выполнения должно быть заполнено до закрытия обращения');
+            timeToCompleteInput.reportValidity();
+            return false
+        }
+        if (!connectionTypeInput.value) {
+            connectionTypeInput.setCustomValidity('Поле типа подключения должно быть заполнено до закрытия обращения');
+            connectionTypeInput.reportValidity();
             return false
         }
     }
@@ -186,6 +224,12 @@ function validateUpdateAppealData(headsetInput, soundIsOkInput, dateOfGroupStart
         return false
     }
 
+    if (connectionTypeInput.value != '' && !['wi-fi', 'cable'].includes(connectionTypeInput.value)) {
+        connectionTypeInput.setCustomValidity('Поле типа подключения заполнено неверно.')
+        connectionTypeInput.reportValidity();
+        return false
+    }
+
 
     return true
 }
@@ -194,9 +238,7 @@ function addSaveButtonHandler() {
     const saveButton = document.querySelector('#save-button');
     saveButton.addEventListener('click', () => {
         const dataToUpdate = getValuesToUpdateAppeal()
-        if (!dataToUpdate) {
-            return
-        }
+        if (!dataToUpdate) {return}
         const appealPk = document.querySelector('#appeal-card-id').textContent
 
         sendRequestToUpdateAppeal(
@@ -204,11 +246,8 @@ function addSaveButtonHandler() {
                 hideModalWindow();
                 sendRequestToGetAppeals(filterAppeals);
             },
-            () => {
-                alert('Не сработало')
-            },
-            appealPk,
-            dataToUpdate,
+            () => {alert('Не сработало')},
+            appealPk, dataToUpdate,
         )
     })
 }
@@ -258,14 +297,16 @@ function openAppealCard(event) {
     document.querySelector('#appeals-main-container').append(modalWindow);
 
     modalWindow.querySelector('#appeal-card-date-of-start').value = appealData.date_of_group_start;
-    modalWindow.querySelector('#appeal-card-speed-test').textContent = appealData.speed_test;
+    modalWindow.querySelector('#appeal-card-speed-test').value = appealData.speed_test;
     modalWindow.querySelector('#appeal-card-speed-test-comment').value = appealData.speed_test_note;
     modalWindow.querySelector('#appeal-card-student-comment').value = appealData.student_note;
     modalWindow.querySelector('#appeal-card-is-complete').checked = appealData.is_completed;
     modalWindow.querySelector('#appeal-card-camera').value = appealData.camera;
     modalWindow.querySelector('#appeal-card-sound-is-ok').value = appealData.sound_is_ok;
     modalWindow.querySelector('#appeal-card-headset').value = appealData.headset;
-    modalWindow.querySelector('#appeal-card-type').value = appealData.appeal_type;
+    modalWindow.querySelector('#appeal-card-type').value = appealData.type;
+    modalWindow.querySelector('#appeal-card-time-to-complete').value = appealData.time_to_complete;
+    modalWindow.querySelector('#appeal-card-type-of-connection').value = appealData.type_of_connection;
 
     const appealCardFixikChoiceSelect = modalWindow.querySelector('#appeal-card-fixik-choice');
     appealCardFixikChoiceSelect.innerHTML = ''
@@ -339,8 +380,13 @@ function getValuesToUpdateAppeal() {
     const cameraInput = document.querySelector('#appeal-card-camera')
     const isCompletedCheckBox = document.querySelector('#appeal-card-is-complete')
     const appealTypeSelect = document.querySelector('#appeal-card-type')
+    const timeToCompleteInput = document.querySelector('#appeal-card-time-to-complete')
+    const connectionTypeInput = document.querySelector('#appeal-card-type-of-connection')
+    const speedTestInput = document.querySelector('#appeal-card-speed-test')
+    const speedTestCommentInput = document.querySelector('#appeal-card-speed-test-comment')
+    const studentCommentInput = document.querySelector('#appeal-card-student-comment')
 
-    if (!validateUpdateAppealData(headsetInput, soundIsOkInput, dateOfGroupStartInput, workerIdInput, cameraInput, isCompletedCheckBox, appealTypeSelect)) {
+    if (!validateUpdateAppealData(headsetInput, soundIsOkInput, dateOfGroupStartInput, workerIdInput, cameraInput, isCompletedCheckBox, appealTypeSelect, timeToCompleteInput, connectionTypeInput)) {
         return
     }
 
@@ -367,6 +413,11 @@ function getValuesToUpdateAppeal() {
     const workerId = Number(workerIdInput.value);
     const toComplete = isCompletedCheckBox.checked;
     const appealType = appealTypeSelect.value;
+    const connectionType = connectionTypeInput.value;
+    const timeToComplete = timeToCompleteInput.value;
+    const speedTest = speedTestInput.value;
+    const speedTestComment = speedTestCommentInput.value;
+    const studentComment = studentCommentInput.value;
 
     return {
         headset: headset,
@@ -376,7 +427,20 @@ function getValuesToUpdateAppeal() {
         toComplete: toComplete,
         camera: camera,
         appealType: appealType,
+        connectionType: connectionType,
+        timeToComplete: timeToComplete,
+        speedTest: speedTest,
+        speedTestComment: speedTestComment,
+        studentComment: studentComment,
+
     }
+}
+
+function exportButtonHandler() {
+    const exportButton = document.querySelector('#export-button')
+    exportButton.addEventListener('click', () => {
+        sendRequestToExportAppeals(filterAppealsToExport())
+    })
 }
 
 
@@ -385,7 +449,8 @@ sendRequestToGetAppeals(filterAppeals)
 addOpenAppealCardHandler()
 addSpamModalWindowButtonsHandler()
 addFilterHandler()
+exportButtonHandler()
 //setTimeout(filterAppeals, 2000)  // установить таймер для обработки функции, в милисекундах
 
-// TODO переписать во всех js файлах отправку запроса под универсальность (api.js)
-// TODO переписать существующие функции под пормат стрелочных(безымянных функций)
+// TODO
+// TODO

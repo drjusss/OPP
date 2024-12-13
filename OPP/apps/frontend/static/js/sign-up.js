@@ -1,40 +1,32 @@
-function sendRequestToSignUp() {
+function addClickButtonHandler() {
+    const button = document.querySelector('#sign-in-button');
+    const valuesToSignUp = getValuesToSignUp()
+    if (!valuesToSignUp) {
+        return
+    }
+
+    button.addEventListener('click', () => {
+        sendRequestToSignUp(
+            () => {
+                alert('Вы успешно зарегистрировались.');
+                window.location.href = domain;
+            },
+            () => {alert(`${data.error}: ${data.detail}`)},
+            valuesToSignUp
+        )
+    })
+}
+
+function getValuesToSignUp() {
     const userName = document.querySelector('#user-name').value;
     const password = document.querySelector('#password').value;
     const passwordConfirmation = document.querySelector('#password-confirmation').value;
 
-    const options = {
-        method: 'POST',
-        header: {
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({
-            username: userName,
-            password: password,
-            password_confirmation: passwordConfirmation,
-        })
-    };
-
-    fetch(`${domain}/api/auth/sign-up/`, options)
-    .then(response => {
-        return response.json()
-    })
-    .then(data => {
-        if (data.result == 'Successfully sign up.') {
-            alert('Вы успешно зарегистрировались.');
-            window.location.href = domain;
-        } else {
-            alert(`${data.error}: ${data.detail}`);
-        }
-    })
-    .catch(error => {
-        console.log(error.stack);
-    })
-}
-
-function addClickButtonHandler() {
-    const button = document.querySelector('#sign-in-button');
-    button.addEventListener('click', sendRequestToSignUp);
+    return {
+        userName: userName,
+        password: password,
+        passwordConfirmation: passwordConfirmation,
+    }
 }
 
 function formSubmitHandler(event) {
@@ -45,14 +37,25 @@ function formSubmitHandler(event) {
         return
     };
 
-    sendRequestToSignUp();
+    const valuesToSignUp = getValuesToSignUp()
+    if (!valuesToSignUp) {
+        return
+    }
+
+    sendRequestToSignUp(
+        () => {
+            alert('Вы успешно зарегистрировались.');
+            window.location.href = domain;
+        },
+        () => {alert(`${data.error}: ${data.detail}`)},
+        valuesToSignUp
+    );
 }
 
 function addFormSubmitHandler() {
     const form = document.querySelector('form');
     form.addEventListener('submit', formSubmitHandler)
 }
-
 
 function validateSignUp() {
     const userNameInput = document.querySelector('#user-name');
@@ -80,6 +83,7 @@ function validateSignUp() {
 
     return true;
 }
+
 
 addFormSubmitHandler()
 addShowPasswordHandler()

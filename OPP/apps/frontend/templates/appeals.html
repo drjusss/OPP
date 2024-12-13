@@ -7,25 +7,37 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href='{% static "css/style.css" %}'>
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Поддержка учеников</title>
 </head>
-<body>
+<body class="dark:bg-gray-800">
     <div id="appeals-main-container">
-        <div id="header">
-            <img id="logo" src="{% static 'img/logo.svg' %}" >
+        <div class="p-4 rounded-2xl flex items-center justify-between mb-12 border-2 border-gray-600 dark:bg-gray-900">
+            <div class="flex items-center mr-4 dark:text-gray-400 text-xl">
+                <svg class="mr-2" xmlns="http://www.w3.org/2000/svg" height="2.5rem" viewBox="0 -960 960 960" width="2.5rem" fill="currentColor"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z"/></svg>
+                <span class="">Андрей Кравцов</span>
+            </div>
             <div id="header-buttons">
-                <button type="button" class="flex-items-center mr-4">
-                    <svg class="text-blue mr-2" xmlns="http://www.w3.org/2000/svg" height="2.5rem" viewBox="0 -960 960 960" width="2.5rem" fill="currentColor"><path d="M234-276q51-39 114-61.5T480-360q69 0 132 22.5T726-276q35-41 54.5-93T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 59 19.5 111t54.5 93Zm246-164q-59 0-99.5-40.5T340-580q0-59 40.5-99.5T480-720q59 0 99.5 40.5T620-580q0 59-40.5 99.5T480-440Zm0 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q53 0 100-15.5t86-44.5q-39-29-86-44.5T480-280q-53 0-100 15.5T294-220q39 29 86 44.5T480-160Zm0-360q26 0 43-17t17-43q0-26-17-43t-43-17q-26 0-43 17t-17 43q0 26 17 43t43 17Zm0-60Zm0 360Z"/></svg>
-                    <span class="font-5">Андрей Кравцов</span>
-                </button>
-                <button type="button" class="flex-items-center">
-                    <svg class="text-blue mr-2" xmlns="http://www.w3.org/2000/svg" height="2.5rem" viewBox="0 -960 960 960" width="2.5rem" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
-                    <span  id="sign-out-button" class="font-5">Выход</span>
-                </button>
+
+                <div class="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <div class="me-2 text-blue-600 bg-gray-100 rounded-t-lg dark:bg-gray-800 dark:text-blue-500 text-xl">
+                        <a href="#" aria-current="page" class="inline-block p-4">Profile</a>
+                    </div>
+                    <div class="me-2 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300 rounded-t-lg text-xl">
+                        <a href="{% url 'frontend:dashboard' %}" class="inline-block p-4">Таблица обращений</a>
+                    </div>
+                    <div class="me-2 rounded-t-lg hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300 text-xl">
+                        <button type="button" class="flex items-center p-4">
+                            <svg class="text-blue mr-2" xmlns="http://www.w3.org/2000/svg" height="1.5rem" viewBox="0 -960 960 960" width="1.5rem" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"/></svg>
+                            <span  id="sign-out-button" class="">Выход</span>
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div>
+        <div class="flex-items-inline-flex">
             <div id="filter">
                 <div class="flex-items-stretch justify-between mr-8 gap-10">
                     <div class="flex-col">
@@ -68,6 +80,7 @@
                     </div>
                 </div>
             </div>
+            <button type="button" id="export-button">Выгрузить обращения</button>
         </div>
 
         <div id="appeal-list" class="appeal-id"></div>

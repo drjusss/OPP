@@ -9,5 +9,6 @@ urlpatterns = [
     path(route='auth/sign-up/', view=views.sign_up, name='sign-up'),
     path(route='auth/sign-out/', view=views.sign_out, name='sign-out'),
     path(route='appeals', view=views.appeals, name='appeals'),
-    path(route='appeal/<int:pk>/', view=views.appeal, name='appeal')
+    path(route='appeal/<int:pk>/', view=views.appeal, name='appeal'),
+    path(route='dashboard/', view=views.dashboard, name='dashboard')
 ]
