@@ -7,10 +7,11 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href='{% static "css/style.css" %}'>
-    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Создать обращение</title>
 </head>
-<body>
-    <div id="header">
+<body class="dark:bg-gray-800">
+    <div id="header" class="px-4 py-8">
         <img id="logo" src="{% static 'img/logo.svg' %}" >
     </div>
     <div id="main-container" class="gap-4">
@@ -27,23 +28,23 @@
             </div>
         </div>
         <div class="relative">
-            <div id="new-appeal">
+            <div id="new-appeal" class="border-2 border-solid rounded-2xl px-8 py-4 dark:border-gray-600 dark:bg-gray-900">
                 <form id="send-appeal-form">
                     <div class="flex-items-center justify-between">
                         <div class="mb-4 mr-4">
                             <label for="user-name" class="text-grey text-5 mb-1 block">ФИО</label>
-                            <input type="text" id="user-name" class="input-field" name="fullname">
+                            <input type="text" id="user-name" class="br-2 bg-gray-50 border border-gray-500 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-500 dark:hover:bg-gray-700" name="fullname">
                         </div>
                         <div class="mb-4">
                             <label for="skype" class="text-grey text-5 mb-1 block">Skype</label>
-                            <input type="text" id="skype" class="input-field" name="skype">
+                            <input type="text" id="skype" class="br-2 bg-gray-50 border border-gray-500 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-500 dark:hover:bg-gray-700" name="skype">
                         </div>
                     </div>
                     <div class="mb-4">
                         <label for="appeal-content" class="text-grey text-5 mb-1 block">Ваш вопрос</label>
-                        <textarea id="appeal-content" name="appeal-content" rows="3"></textarea>
+                        <textarea id="appeal-content" name="appeal-content" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                     </div>
-                    <button type="submit" id="send-button">Отправить</button>
+                    <button type="submit" id="send-button" class=" ml-44 px-2 py-4 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-2.5 text-center mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Отправить</button>
                 </form>
             </div>
         </div>

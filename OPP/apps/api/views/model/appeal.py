@@ -212,7 +212,7 @@ class ExportAppealsToCSVView(View):
         return response
 
 
-#TODO: поделать что-то с фронтендом
+#TODO: сделать модалку, потрогать табличку?
 #TODO:
 
 # https://flowbite.com/docs/components/alerts/ - алерты, если они у нас где-то останутся

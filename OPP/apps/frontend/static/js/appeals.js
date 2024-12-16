@@ -83,6 +83,7 @@ function displayAppeals(appealsData) {
     for (const appealData of appealsData) {
         const appealCard = document.createElement('div');  //создаем тег div
         appealCard.classList.add('appeal-card')
+        appealCard.classList.add('dark:bg-gray-900')
 
         let worker;
         if (appealData.worker) {

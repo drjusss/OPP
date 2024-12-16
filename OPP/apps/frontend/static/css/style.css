@@ -1,7 +1,3 @@
-body {
-    background-color: #d0d5e4;
-}
-
 button {
     border: none;
 }
@@ -69,18 +65,9 @@ th {
     flex: 1;
 }
 
-.flex-items-stretch {
-    align-items: stretch;
-    display: flex;
-}
-
 .flex-items-center {
     align-items: center;
     display: flex;
-}
-
-.justify-between {
-    justify-content: space-between;
 }
 
 .input-field {
@@ -104,10 +91,6 @@ th {
 
 .mb-4 {
     margin-bottom: 1rem;
-}
-
-.mb-2 {
-    margin-bottom: 0.5rem;
 }
 
 .w-100 {
@@ -150,16 +133,8 @@ th {
     margin-right: 0.5rem;
 }
 
-.mr-8 {
-    margin-right: 2rem;
-}
-
 .br-2 {
     border-radius: 0.5rem;
-}
-
-.gap-10 {
-    gap: 2.5rem;
 }
 
 .font-5 {
@@ -184,12 +159,6 @@ th {
     width: 100%;
 }
 
-.flex-col {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
 .flex {
     display: flex;
 }
@@ -210,42 +179,27 @@ th {
 }
 
 .appeal-card {
-    background-color: #eee;
     border-radius: 1rem;
     padding: 1.5rem 1rem;
-    border: 2px solid #8e8e8e;
+    border: 2px solid rgb(75 85 99);
 }
 
 .appeal-card-label {
     color: #474747;
 }
 
-.flex-items-inline-flex {
-    display: inline-flex;
-}
-
 .appeal-card-large {
     max-height: 90vh;
-    background-color: #eee;
-    border-radius: 1rem;
-    padding: 1.5rem 1rem;
-    border: 2px solid #8e8e8e;
     width: 65rem;
 }
 
 .appeal-item {
-    background-color: white;
     border-radius: 0.5rem;
-    border: 1px solid #a1a1a1;
     padding: 1rem;
     text-align: center;
     font-size: 1.15rem;
     text-overflow: ellipsis;
     overflow-x: hidden;
-}
-
-.bg-read-only-input {
-    background-color: #8080804d;
 }
 
 .relative {
@@ -310,27 +264,11 @@ th {
     overflow-y: scroll;
 }
 
-#filter {
-    padding: 2rem;
-    background-color: #eeeeee;
-    border-radius: 1rem;
-    width: 71rem;
-    max-width: 100vw;
-    margin: auto;
-    border: 2px solid gray;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    margin-left: 22.5rem;
-}
-
 #search-field {
-    width: 20rem;
     border: 1px solid gray;
     border-radius: 0.5rem;
     font-size: 1.25rem;
-    margin-right: 1rem;
-    padding: 0.45rem 0.5rem;
+    padding: 0.5rem 0.5rem;
 }
 
 #form {
@@ -348,19 +286,10 @@ th {
     align-items: center;
 }
 
-#search-button, #save-button, #not-save-button, #close-spam-modal-button {
-    border: 1px solid blue;
-    border-radius: 0.5rem;
-    padding-right: 1rem;
-    padding-left: 1rem;
-    background-color: rgb(29 78 216);
-    color: white;
-}
 
 #filter-fixik, #appeal-type, #only-complete, #appeal-card-headset, #appeal-card-sound-is-ok, #appeal-card-date-of-start, #appeal-card-camera, #appeal-card-speed-test, #appeal-card-speed-test-comment, #appeal-card-student-comment, #appeal-card-type, #appeal-card-time-to-complete, #appeal-card-speed-test-comment, #appeal-card-type-of-connection {
     border-radius: 0.5rem;
     padding: 0.5rem;
-    height: 2.5rem;
 }
 
 
@@ -368,14 +297,12 @@ th {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 4rem;
-    padding: 2rem;
 }
 
 #filter-date-input {
     border-radius: 0.5rem;
-    font-size: 1.5rem;
-    padding: 0.25rem 0.25rem;
-    border: 1px solid gray;
+    padding: 0.5rem 0.5rem;
+    outline: 1px solid rgb(107 114 128);
 }
 
 #log-in {
@@ -404,7 +331,7 @@ th {
     margin-top: 0.5rem;
 }
 
-#sign-in-button:hover, #sign-up-button:hover, #send-button:hover, #is-spam-button:hover {
+#sign-in-button:hover, #sign-up-button:hover {
     background-color: #cdcdcd;
 }
 
@@ -462,13 +389,6 @@ th {
     transform: translate(-50%, 100%);
 }
 
-#new-appeal {
-    background-color: #eeeeee;
-    border: 2px solid grey;
-    border-radius: 1rem;
-    padding: 2rem 1rem;
-    margin: 0 auto;
-}
 
 #appeal-input {
     border: 1px solid black;
@@ -477,31 +397,11 @@ th {
     padding: 0.5rem 1rem;
 }
 
-#send-button {
-    color: black;
-    font-size: 1.25rem;
-    border: 1px solid black;
-    border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
-    margin-top: 0.5rem;
-}
-
 #appeal {
     width: 50rem;
     justify-content: space-around;
     display: flex;
     margin: auto;
-}
-
-#appeal-content {
-    border: 1px solid black;
-    border: 1px solid black;
-    border-radius: 0.5rem;
-    font-size: 1.25rem;
-    padding: 0.5rem 1rem;
-    resize: none;
-    width: 94.5%;
-    max-height: 15rem;
 }
 
 #appeal-card-date-of-start, #appeal-card-speed-test, #appeal-card-time-to-complete, #appeal-card-type-of-connection {
@@ -514,11 +414,7 @@ th {
     resize: vertical;
 }
 
-#save-button {
-    padding: 0.5rem 1rem;
-}
-
-#notification-model-window-close-button, #spam-modal-button {
+#notification-model-window-close-button {
     border: 1px solid blue;
     border-radius: 0.5rem;
     padding: 0.5rem 2rem;
@@ -526,24 +422,9 @@ th {
     color: white;
 }
 
-#not-save-button, #close-spam-modal-button {
-    background-color: red;
-    padding: 0.5rem 1rem;
-    border: 1px solid red;
-}
-
-#is-spam-button {
-    border: 1px solid grey;
-    border-radius: 0.5rem;
-    padding: 0.25rem;
-    cursor: pointer;
-}
 
 #export-button {
     border: 1px solid gray;
     border-radius: 0.5rem;
-    max-height: 7rem;
     align-self: center;
-    padding: 1rem;
-    margin-left: 5rem;
 }
