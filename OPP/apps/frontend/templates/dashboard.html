@@ -7,26 +7,27 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href='{% static "css/style.css" %}'>
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Дашборд ученики</title>
 </head>
-<body>
-    <div class="main-container">
-        <table class="table">
-            <thead>
+<body class="dark:bg-gray-900">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-300 dark:text-gray-300">
+            <thead class="text-xm text-gray-300 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400">
             <tr>
-                <th>ФИО</th>
-                <th>Скайп</th>
-                <th>Гарнитура</th>
-                <th>Wi-fi/Кабель</th>
-                <th>Звук WDE</th>
-                <th>Наличие камеры</th>
-                <th>Скорость инета/пинг</th>
-                <th>Дата старта группы</th>
-                <th>Кто сделал</th>
-                <th>Время на проверку</th>
+                <th scope="col" class="px-6 py-3">ФИО</th>
+                <th scope="col" class="px-6 py-3">Скайп</th>
+                <th scope="col" class="px-6 py-3">Гарнитура</th>
+                <th scope="col" class="px-6 py-3">Wi-fi/Кабель</th>
+                <th scope="col" class="px-6 py-3">Звук WDE</th>
+                <th scope="col" class="px-6 py-3">Наличие камеры</th>
+                <th scope="col" class="px-6 py-3">Скорость инета/пинг</th>
+                <th scope="col" class="px-6 py-3">Дата старта группы</th>
+                <th scope="col" class="px-6 py-3">Кто сделал</th>
+                <th scope="col" class="px-6 py-3">Время на проверку</th>
             </tr>
             </thead>
-            <tbody id="appeal-table-body"></tbody>
+            <tbody id="appeal-table-body" class=""></tbody>
         </table>
     </div>
     <script src="{% static 'js/api.js' %}"></script>

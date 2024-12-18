@@ -4,6 +4,12 @@ function displayAppealsToDashboard(appealsData) {
 
     for (const appealData of appealsData) {
         const appealRow = document.createElement('tr');
+        appealRow.classList.add('bg-white')
+        appealRow.classList.add('border-b')
+        appealRow.classList.add('dark:bg-gray-800')
+        appealRow.classList.add('dark:border-gray-700')
+        appealRow.classList.add('hover:bg-gray-50')
+        appealRow.classList.add('dark:hover:bg-gray-900')
 
         let worker;
         if (appealData.worker) {

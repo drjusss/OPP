@@ -139,17 +139,16 @@ const appealDetailWindowHTMLTemplate = `
     <div style="top: 0; right: 0; bottom: 0; left: 0; background-color: rgb(107 114 128); position: fixed; z-index: 10; opacity: 50%;"></div>
     <div style="height: 100%; width: 100%; position: fixed; top: 0; right: 0; left: 0; z-index: 20; display: flex; align-items: center; justify-content: center;">
         <div id="appeal">
-            <div class="appeal-card-large rounded-2xl px-6 py-4 border-2 border-solid dark:border-gray-600 overflow-y-scroll dark:bg-gray-900">
-                <div class="justify-between grid grid-cols-4 mb-4 text-xl gap-6">
-                    <div id="appeal-card-id" class="dark:text-gray-300">{{ appeal_id }}</div>
-                    <div>
-                        <select name="fixik" id="appeal-card-fixik-choice" class="br-2 bg-gray-50 border border-gray-500 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></select>
+            <div class="scrollbar-none appeal-card-large rounded-2xl px-6 py-4 border-2 border-solid dark:border-gray-600 overflow-y-scroll dark:bg-gray-900">
+                <div class="justify-between grid grid-cols-4 mb-4 text-xl gap-10">
+                    <div id="appeal-card-id" class="flex items-center dark:text-gray-300">
+                        <span>{{ appeal_id }}</span>
+                    </div>
+                    <div class="col-span-2">
+                        <select name="fixik" id="appeal-card-fixik-choice" class="br-2 bg-gray-50 border border-gray-500 text-center text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></select>
                     </div>
                     <div class="check-box">
-                        <button id="is-spam-button" type="button" class="border border-solid border-gray-600 rounded-lg p-1 cursor-pointer text-xl w-full h-full dark:text-gray-300 dark:hover:text-gray-300 dark:hover:bg-gray-700">Спам</button>
-                    </div>
-                    <div class="check-box">
-                        <label for="appeal-card-is-complete" class="appeal-card-label mr-2 dark:text-gray-300">Выполненно</label>
+                        <label for="appeal-card-is-complete" class="appeal-card-label mr-2 dark:text-gray-400">Выполненно</label>
                         <input type="checkbox" id="appeal-card-is-complete" class="w-8 h-8">
                     </div>
                 </div>
@@ -229,9 +228,10 @@ const appealDetailWindowHTMLTemplate = `
                         <label for="appeal-card-student-comment" class="appeal-card-label dark:text-gray-400">Комментарий к ученику</label>
                         <textarea id="appeal-card-student-comment" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
                     </div>
-                    <div class="flex m-auto gap-4">
-                        <button id="save-button" type="button" class="px-2 py-4 text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Сохранить</button>
-                        <button id="not-save-button" type="button" class="px-2 py-4 text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xl px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">Не сохранять</button>
+                    <div class="grid grid-cols-3 m-auto gap-4">
+                        <button id="save-button" type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Сохранить</button>
+                        <button id="not-save-button" type="button" class="text-gray-700 hover:text-white border border-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-xl px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-500 dark:text-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-900">Не сохранять</button>
+                        <button id="is-spam-button" type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-xl px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">Спам</button>
                     </div>
                 </div>
             </div>
@@ -288,16 +288,16 @@ const spamModalWindowHTMLTemplate = `
 `
 
 const dashboardHTMLTemplate = `
-    <td>{{ name }}</td>
-    <td>{{ skype }}</td>
-    <td>{{ headset }}</td>
-    <td>{{ type_of_connection }}</td>
-    <td>{{ sound_is_ok }}</td>
-    <td>{{ camera }}</td>
-    <td>{{ speed_test }}</td>
-    <td>{{ date_of_group_start }}</td>
-    <td>{{ worker }}</td>
-    <td>{{ time_to_complete }}</td>
+    <td scope="col" class="px-6 py-3">{{ name }}</td>
+    <td scope="col" class="px-6 py-3">{{ skype }}</td>
+    <td scope="col" class="px-6 py-3">{{ headset }}</td>
+    <td scope="col" class="px-6 py-3">{{ type_of_connection }}</td>
+    <td scope="col" class="px-6 py-3">{{ sound_is_ok }}</td>
+    <td scope="col" class="px-6 py-3">{{ camera }}</td>
+    <td scope="col" class="px-6 py-3">{{ speed_test }}</td>
+    <td scope="col" class="px-6 py-3">{{ date_of_group_start }}</td>
+    <td scope="col" class="px-6 py-3">{{ worker }}</td>
+    <td scope="col" class="px-6 py-3">{{ time_to_complete }}</td>
 `
 
 const appealCompletionIcons = {

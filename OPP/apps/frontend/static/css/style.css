@@ -1,11 +1,3 @@
-button {
-    border: none;
-}
-
-button:hover {
-    cursor: pointer;
-}
-
 p {
     margin: 0;
     padding: 0;
@@ -13,40 +5,6 @@ p {
 
 th {
     font-weight: 400;
-}
-
-.table {
-    border-spacing: inherit;
-    width: 100%;
-    border: 1px solid gray;
-    border-radius: 0.5rem;
-}
-
-.table thead {
-    background-color: #eee;
-}
-
-.table thead tr th {
-    border-width: 0;
-    padding: 1rem 1rem;
-    border: 0.1rem solid #c6c6c6;
-}
-
-.table thead tr th:first-child {
-	border-radius: 0.5rem 0 0 0.5rem;
-}
-
-.table thead tr th:last-child {
-	border-radius: 0 0.5rem 0.5rem 0;
-}
-
-.table tbody tr:nth-child(even) {
-    background-color: #eee;
-}
-
-.table tbody tr td {
-    padding: 0.75rem 1rem;
-    border: 0.1rem solid #c6c6c6;
 }
 
 .text-5 {
@@ -63,6 +21,10 @@ th {
 
 .flex-1 {
     flex: 1;
+}
+
+.scrollbar-none {
+    scrollbar-width: none;
 }
 
 .flex-items-center {
@@ -413,15 +375,6 @@ th {
 #appeal-card-speed-test-comment, #appeal-card-student-comment {
     resize: vertical;
 }
-
-#notification-model-window-close-button {
-    border: 1px solid blue;
-    border-radius: 0.5rem;
-    padding: 0.5rem 2rem;
-    background-color: rgb(29 78 216);
-    color: white;
-}
-
 
 #export-button {
     border: 1px solid gray;

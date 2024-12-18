@@ -158,7 +158,7 @@ class ExportAppealsToCSVView(View):
         appeal_type_filter_value = request.GET.get('appeal-type')
         appeal_date_filter_value = request.GET.get('appeal-date')
         search_filter_value = request.GET.get('search')
-
+        print(worker_id_filter_value)
         if os_type == 'windows':
             os_type_encoding = 'windows-1251'
         else:
@@ -212,8 +212,11 @@ class ExportAppealsToCSVView(View):
         return response
 
 
-#TODO: сделать модалку, потрогать табличку?
-#TODO:
+#TODO: доделать модалку успешного отправления обращения сделать везде равные отступы, удалить лишних фиксиков
+#TODO: унифицировать resize для 2 полей в appeals (комментарии), добавить плавающий лейбл для модалки appeals, перенести spam вниз к кнопкам(закрасить спам красным, а не сохранять серым)
+
+
+#TODO: пофиксить баг с None инженером, в ExportAppealsToCSVView
 
 # https://flowbite.com/docs/components/alerts/ - алерты, если они у нас где-то останутся
 # https://flowbite.com/docs/components/buttons/ - кнопки, возможно стоит взять готовый вариант с ховерами и везде где есть - заменить
