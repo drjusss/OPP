@@ -80,3 +80,20 @@ function getVerboseNow() {
     const result = `${day}-${month}-${year} ${hours}-${minutes}-${seconds}`
     return result
 }
+
+function addMessageInputHandler(selector) {
+    const messageInput = document.querySelector(selector)
+    messageInput.addEventListener('input', () => {
+        messageInput.setCustomValidity('')
+        autoResizeHandler(messageInput);
+    })
+}
+
+function autoResizeHandler(element) {
+    element.style.height = 'auto';
+    element.style.height = `${element.scrollHeight}px`;
+}
+
+function isCyrillicWithDash(str) {
+    return /^[а-яА-ЯёЁ\s-]+$/.test(str);
+}

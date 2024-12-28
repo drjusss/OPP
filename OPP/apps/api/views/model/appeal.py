@@ -16,6 +16,11 @@ from apps.api.utils import general as general_utils, serializers, decorators, va
 from apps.api import models
 
 
+@method_decorator(name='get', decorator=decorators.check_authorized_decorator)
+@method_decorator(name='patch', decorator=decorators.check_authorized_decorator)
+@method_decorator(name='delete', decorator=decorators.check_authorized_decorator)
+@method_decorator(name='patch', decorator=decorators.check_user_is_engineer)
+@method_decorator(name='delete', decorator=decorators.check_user_is_engineer)
 @method_decorator(name='post', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_create_appel, data_validation_func=validators.validate_data_to_create_appeal))
 @method_decorator(name='patch', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_change_appeal_complete_status, data_validation_func=validators.validate_data_to_change_appeal_complete_status))
 @method_decorator(name='delete', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_delete_or_restore_appeals, data_validation_func=validators.validate_data_to_delete_or_restore_appeals))
@@ -75,10 +80,14 @@ class AppealsApiView(View):
         return JsonResponse(data={'result': 'The appeals was successfully deleted'}, status=200)
 
 
+@method_decorator(name='dispatch', decorator=decorators.check_authorized_decorator)
+@method_decorator(name='put', decorator=decorators.check_user_is_engineer)
+@method_decorator(name='patch', decorator=decorators.check_user_is_engineer)
+@method_decorator(name='delete', decorator=decorators.check_user_is_engineer)
 @method_decorator(name='put', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_update_appeal, data_validation_func=validators.validate_data_to_update_appeal))
 @method_decorator(name='patch', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_complete_appeal, data_validation_func=validators.validate_data_to_complete_appeal))
 @method_decorator(name='delete', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_delete_appeal, data_validation_func=validators.validate_data_to_change_delete_and_spam_status))
-@method_decorator(name='dispatch', decorator=decorators.check_for_nonempty_request(get_func=appeal_utils.get))
+@method_decorator(name='dispatch', decorator=decorators.check_object_exist(get_func=appeal_utils.get))
 class AppealApiView(View):
     def get(self, request: HttpRequest, appeal: models.Appeal) -> HttpResponse:
         response_data = serializers.serialize_appeal(appeal=appeal)
@@ -139,6 +148,8 @@ class AppealApiView(View):
         return JsonResponse(data={'result': 'The appeal was successfully updated.'}, status=200)
 
 
+@method_decorator(name='get', decorator=decorators.check_authorized_decorator)
+@method_decorator(name='get', decorator=decorators.check_user_is_engineer)
 class FixiksApiView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
         fixiks_obj = models.AugmentedUser.objects.all()
@@ -148,6 +159,7 @@ class FixiksApiView(View):
 
 
 @method_decorator(name='get', decorator=decorators.check_authorized_decorator)
+@method_decorator(name='get', decorator=decorators.check_user_is_engineer)
 @method_decorator(name='get', decorator=decorators.validate_get_request_to_export_appeals(query_params_validation_func=validators.validate_query_dict_to_export_appeals, data_validation_func=validators.validate_data_to_export_appeals))
 class ExportAppealsToCSVView(View):
     def get(self, request: HttpRequest) -> FileResponse:
@@ -158,7 +170,7 @@ class ExportAppealsToCSVView(View):
         appeal_type_filter_value = request.GET.get('appeal-type')
         appeal_date_filter_value = request.GET.get('appeal-date')
         search_filter_value = request.GET.get('search')
-        print(worker_id_filter_value)
+
         if os_type == 'windows':
             os_type_encoding = 'windows-1251'
         else:
@@ -199,8 +211,16 @@ class ExportAppealsToCSVView(View):
                 # appeals = appeals.filter(Q(pk__icontains=search_filter_value) | Q(name__icontains=search_filter_value) | Q(skype__icontains=search_filter_value) | Q(message__icontains=search_filter_value))
                 appeals = appeals.filter(pk__icontains=search_filter_value) | appeals.filter(name__icontains=search_filter_value) | appeals.filter(skype__icontains=search_filter_value) | appeals.filter(message__icontains=search_filter_value)
 
+            appeals = list(appeals)
+            appeals.sort(key=lambda appeal: appeal.name.lower())
+
             for appeal in appeals:
-                writer.writerow([appeal.name, appeal.skype, appeal.headset, appeal.type_of_connection, appeal.headset, appeal.camera, appeal.speed_test, appeal.date_of_group_start, appeal.worker.name])
+                if appeal.worker is None:
+                    worker = '-'
+                else:
+                    worker = appeal.worker.name
+
+                writer.writerow([appeal.name, appeal.skype, appeal.headset, appeal.type_of_connection, appeal.headset, appeal.camera, appeal.speed_test, appeal.date_of_group_start, worker])
 
         response = FileResponse(open(file=file_name, mode='rb'))  # as_attachment чтобы дать понять что мы отправляем файл, который нужно скачать
 
@@ -212,11 +232,8 @@ class ExportAppealsToCSVView(View):
         return response
 
 
-#TODO: доделать модалку успешного отправления обращения сделать везде равные отступы, удалить лишних фиксиков
-#TODO: унифицировать resize для 2 полей в appeals (комментарии), добавить плавающий лейбл для модалки appeals, перенести spam вниз к кнопкам(закрасить спам красным, а не сохранять серым)
-
-
-#TODO: пофиксить баг с None инженером, в ExportAppealsToCSVView
+#TODO: отрефакторить бэк
+#TODO:
 
 # https://flowbite.com/docs/components/alerts/ - алерты, если они у нас где-то останутся
 # https://flowbite.com/docs/components/buttons/ - кнопки, возможно стоит взять готовый вариант с ховерами и везде где есть - заменить

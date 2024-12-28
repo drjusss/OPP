@@ -47,6 +47,12 @@ function validateAppealContent(nameInput, skypeInput, messageInput) {
         return false;
     }
 
+    if (!isCyrillicWithDash(nameInput.value)) {
+        nameInput.setCustomValidity('ФИО может состоять только из букв кириллицы(может использоваться дефис).')
+        nameInput.reportValidity()
+        return False
+    }
+
     if (skypeInput.value.length < 5) {
         skypeInput.setCustomValidity('Длина скайпа должна быть не менее 5 символов.')
         skypeInput.reportValidity()

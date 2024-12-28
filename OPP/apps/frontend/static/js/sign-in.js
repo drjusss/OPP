@@ -13,7 +13,6 @@ function formSubmitHandler(event) {
 
     sendRequestToSignIn(
         () => {
-            alert('Вы вошли в систему.');
             window.location.href = `${domain}/appeals`;
         },
         () => {

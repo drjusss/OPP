@@ -48,3 +48,19 @@ def serialize_appeal_to_unauthorized_user(appeal: models.Appeal) -> dict:
         'skype': appeal.skype,
         'message': appeal.message,
     }
+
+
+def serialize_engineer(engineer: models.AugmentedUser) -> dict:
+    return {
+        'name': engineer.name,
+        'email': engineer.email,
+        'amount_completed_tasks': engineer.amount_completed_tasks,
+        'amount_running_tasks': engineer.amount_running_tasks,
+    }
+
+
+def serialize_manager(manager: models.Manager) -> dict:
+    return {
+        'name': manager.name,
+        'email':manager.email,
+    }

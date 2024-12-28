@@ -17,3 +17,9 @@ class AppealAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_filter = ['is_completed', 'sound_is_ok', 'headset', 'worker', 'is_deleted']  # Фильтрация по полям
     search_fields = ['pk', 'skype', 'date_of_group_start']  # Поиск по таблице
+
+
+@admin.register(models.Manager)
+class ManagerAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'name', 'user', 'email']
+    list_display_links = ['pk', 'name', 'user', 'email']

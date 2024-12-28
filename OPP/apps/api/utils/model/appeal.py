@@ -33,24 +33,34 @@ def update(
 
     if headset is not None:
         appeal.headset = headset
+
     if sound_is_ok is not None:
         appeal.sound_is_ok = sound_is_ok
+
     if date_of_group_start is not None:
         appeal.date_of_group_start = date_of_group_start
+
     if to_complete is not None:
         appeal.is_completed = to_complete
+
     if camera is not None:
         appeal.camera = camera
+
     if type is not None:
         appeal.type = type
+
     if connection_type is not None:
         appeal.type_of_connection = connection_type
+
     if time_to_complete is not None:
         appeal.time_to_complete = time_to_complete
+
     if speed_test is not None:
         appeal.speed_test = speed_test
+
     if speed_test_note is not None:
         appeal.speed_test_note = speed_test_note
+
     if student_note is not None:
         appeal.student_note = student_note
 
@@ -59,9 +69,7 @@ def update(
             augmented_user_utils.decrement_amount_running_tasks(augmented_user=appeal.worker)
         appeal.worker = worker
         augmented_user_utils.increment_amount_running_tasks(augmented_user=worker)
-
     appeal.save()
-    print(appeal.speed_test)
 
 
 def change_complete_status(appeal: models.Appeal, to_complete: bool) -> None:
@@ -79,17 +87,9 @@ def change_spam_status(appeal: models.Appeal, is_spam: bool) -> None:
     appeal.save()
 
 
-def create(
-    name: str,
-    skype: str,
-    message: str
-) -> models.Appeal:
-
-    appeal = models.Appeal(
-        name=name,
-        skype=skype,
-        message=message,
-    )
+def create(name: str, skype: str, message: str) -> models.Appeal:
+    appeal = models.Appeal(name=name, skype=skype, message=message)
     appeal.save()
+
     return appeal
 

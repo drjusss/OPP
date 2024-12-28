@@ -2,6 +2,20 @@ let appeals = [];
 let fixiks = [];
 
 
+function sendRequestToGetPersonalData(successfulHandler) {
+    fetch(`${domain}/api/engineer-personal-data/`)
+    .then(response => {
+        return response.json()
+    })
+    .then(data => {
+        successfulHandler(data)
+    })
+    .catch(error => {
+        console.error(error.stack)
+    })
+}
+
+
 function sendRequestToDeleteAppeal(appealID, successfulHandler) {
 
     const options = {

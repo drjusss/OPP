@@ -1,5 +1,9 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpRequest, HttpResponse
+
+from apps.api.utils import general
+from apps.api import models
+from apps.api.utils import decorators
 # Create your views here.
 
 
@@ -10,22 +14,32 @@ def main_page_view(request: HttpRequest) -> HttpResponse:
     )
 
 
+@decorators.check_authorized_decorator
 def appeals(request: HttpRequest) -> HttpResponse:
-    return render(
-        request=request,
-        template_name='appeals.html'
-    )
+    role = general.get_role_by_user(user=request.user)  # type: ignore
+    if role != 'engineer':
+        return HttpResponse(status=404)
+
+    return render(request=request, template_name='appeals.html')
 
 
-def appeal(request: HttpRequest, pk: int) -> HttpResponse:
+@decorators.check_authorized_decorator
+def dashboard(request: HttpRequest) -> HttpResponse:
+    augmented_user = models.AugmentedUser.objects.filter(user=request.user).first()  # type: ignore
+    if augmented_user is not None:
+        role = 'engineer'
+    else:
+        role = 'manager'
+
     return render(
         request=request,
-        template_name='appeal.html'
+        template_name='dashboard.html',
+        context={'role': role}
     )
 
 
 def sign_in(request: HttpRequest) -> HttpResponse:
-    if request.user.is_authenticated:
+    if request.user.is_authenticated:  # type: ignore
         return redirect(to=reverse(viewname='frontend:main-page'))
     return render(
         request=request,
@@ -33,24 +47,8 @@ def sign_in(request: HttpRequest) -> HttpResponse:
     )
 
 
-def sign_up(request: HttpRequest) -> HttpResponse:
-    if request.user.is_authenticated:
-        return redirect(to=reverse(viewname='frontend:main-page'))
-    return render(
-        request=request,
-        template_name='sign-up.html'
-    )
-
-
 def sign_out(request: HttpRequest) -> HttpResponse:
     return render(
         request=request,
         template_name='sign-out.html'
-    )
-
-
-def dashboard(request: HttpRequest) -> HttpResponse:
-    return render(
-        request=request,
-        template_name='dashboard.html'
     )

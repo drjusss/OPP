@@ -5,6 +5,7 @@ from functools import wraps
 from django.http import HttpRequest, HttpResponse, JsonResponse
 
 from apps.api.utils.model import augmented_user as augmented_user_utils
+from apps.api import models
 
 
 def check_authorized_decorator(func: typing.Callable) -> typing.Callable:
@@ -13,6 +14,17 @@ def check_authorized_decorator(func: typing.Callable) -> typing.Callable:
         if not request.user.is_authenticated:
             return JsonResponse(data={'error': 'Not authorized.'}, status=401)
         return func(request=request, *args, **kwargs)
+
+    return wrapper
+
+
+def check_user_is_engineer(func: typing.Callable) -> typing.Callable:
+    @wraps(func)
+    def wrapper(request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        augmented_user = models.AugmentedUser.objects.filter(user=request.user).first()  # используем filter/first чтобы не нужно было делать try except(т.к. filter/first вернет None при отсутствие значение, в отличии от get, который вернет ошибку)
+        if augmented_user is not None:
+            return func(request=request, *args, **kwargs)
+        return JsonResponse(data={'error': 'Permission denied.'}, status=403)
 
     return wrapper
 
@@ -74,7 +86,7 @@ def validate_credential_json(json_validation_func: typing.Callable) -> typing.Ca
     return decorator
 
 
-def check_for_nonempty_request(get_func: typing.Callable) -> typing.Callable:
+def check_object_exist(get_func: typing.Callable) -> typing.Callable:
     """При использовании декоратора, сигнатура функции дополняется параметром appeal(dict | list)"""
     def decorator(func: typing.Callable) -> typing.Callable:
         @wraps(func)

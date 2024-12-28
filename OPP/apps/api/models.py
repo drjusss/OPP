@@ -35,6 +35,18 @@ class AugmentedUser(models.Model):
         db_table = 'augmented_user'
 
 
+class Manager(models.Model):
+    objects = models.Manager()
+    name = models.CharField(max_length=50, verbose_name='Имя менеджера')
+    user = models.OneToOneField(to=User, on_delete=models.PROTECT, verbose_name='Встроенный пользователь')
+    email = models.CharField(max_length=30, unique=True, verbose_name='Почта')
+
+    class Meta:
+        verbose_name = 'Менеджер'
+        verbose_name_plural = 'Менеджеры'
+        db_table = 'manager'
+
+
 class Appeal(models.Model):
     objects = models.Manager()
     name = models.CharField(max_length=60, verbose_name='ФИО ученика')
@@ -61,3 +73,6 @@ class Appeal(models.Model):
         verbose_name_plural = 'Обращения'
         db_table = 'appeal'
         default_related_name = 'appeals'
+
+
+#TODO: переименовать AugmentedUser в Engineer

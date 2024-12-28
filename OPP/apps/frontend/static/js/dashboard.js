@@ -6,8 +6,9 @@ function displayAppealsToDashboard(appealsData) {
         const appealRow = document.createElement('tr');
         appealRow.classList.add('bg-white')
         appealRow.classList.add('border-b')
+        appealRow.classList.add('border-x-2')
         appealRow.classList.add('dark:bg-gray-800')
-        appealRow.classList.add('dark:border-gray-700')
+        appealRow.classList.add('dark:border-gray-600')
         appealRow.classList.add('hover:bg-gray-50')
         appealRow.classList.add('dark:hover:bg-gray-900')
 
@@ -64,9 +65,33 @@ function displayAppealsToDashboard(appealsData) {
                                                     .replace('{{ date_of_group_start }}', appealData.date_of_group_start || '-')
                                                     .replace('{{ worker }}', worker)
                                                     .replace('{{ time_to_complete }}', appealData.time_to_complete || '-')
-
         appealList.append(appealRow);
+
     }
+
+    const tableRowElements = appealList.querySelectorAll('tr')
+    const lastTableRow = tableRowElements[tableRowElements.length - 1]
+
+    const tableDataElements = lastTableRow.querySelectorAll('td')
+
+    for (const tableDataElement of tableDataElements) {
+        tableDataElement.classList.add('border-b-2')
+        tableDataElement.classList.add('dark:border-gray-600')
+        console.log(tableDataElement)
+    }
+
+    const firstTableData = tableDataElements[0]
+    const lastTableData = tableDataElements[tableDataElements.length - 1]
+
+    firstTableData.classList.add('rounded-bl-lg')
+    lastTableData.classList.add('rounded-br-lg')
+}
+
+function getPersonalData() {
+    sendRequestToGetPersonalData((data) => {
+        const engineerName = document.querySelector('#engineer-name');
+        engineerName.textContent = data.name;
+    })
 }
 
 function fillTableByAppeals() {
@@ -75,4 +100,6 @@ function fillTableByAppeals() {
     })
 }
 
+
+getPersonalData()
 fillTableByAppeals()

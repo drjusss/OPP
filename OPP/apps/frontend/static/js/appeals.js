@@ -82,8 +82,14 @@ function displayAppeals(appealsData) {
 
     for (const appealData of appealsData) {
         const appealCard = document.createElement('div');  //создаем тег div
+        appealCard.classList.add('border-2')
         appealCard.classList.add('appeal-card')
+        appealCard.classList.add('border-solid')
         appealCard.classList.add('dark:bg-gray-900')
+        appealCard.classList.add('dark:border-gray-500')
+        appealCard.classList.add('px-6')
+        appealCard.classList.add('py-4')
+        appealCard.classList.add('rounded-2xl')
 
         let worker;
         if (appealData.worker) {
@@ -329,6 +335,8 @@ function openAppealCard(event) {
     addHideModalWindowHandler()
     addSpamModalWindowHandler()
     addSaveButtonHandler()
+    addMessageInputHandler('#appeal-card-speed-test-comment')
+    addMessageInputHandler('#appeal-card-student-comment')
 }
 
 function autoFillFixiksSelect() {
@@ -444,13 +452,22 @@ function exportButtonHandler() {
     })
 }
 
+function getPersonalData() {
+    sendRequestToGetPersonalData((data) => {
+        const engineerName = document.querySelector('#engineer-name');
+        engineerName.textContent = data.name;
+    })
+}
+
 
 sendRequestToGetFixiks(autoFillFixiksSelect)
 sendRequestToGetAppeals(filterAppeals)
+getPersonalData()
 addOpenAppealCardHandler()
 addSpamModalWindowButtonsHandler()
 addFilterHandler()
 exportButtonHandler()
+getPersonalData()
 //setTimeout(filterAppeals, 2000)  // установить таймер для обработки функции, в милисекундах
 
 // TODO
