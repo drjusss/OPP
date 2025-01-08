@@ -97,3 +97,5 @@ function autoResizeHandler(element) {
 function isCyrillicWithDash(str) {
     return /^[а-яА-ЯёЁ\s-]+$/.test(str);
 }
+const a = 5
+const test = a > 10 ? 'true' : 'false'

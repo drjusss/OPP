@@ -20,7 +20,7 @@ TYPE_OF_CONNECTION = [
 ]
 
 
-class AugmentedUser(models.Model):
+class Engineer(models.Model):
     objects = models.Manager()
     name = models.CharField(max_length=50, verbose_name='Имя инженера')
     user = models.OneToOneField(to=User, on_delete=models.PROTECT, verbose_name='Встроенный пользователь')  # PROTECT - чтобы нельзя было удалить
@@ -57,7 +57,7 @@ class Appeal(models.Model):
     type_of_connection = models.CharField(max_length=10, choices=TYPE_OF_CONNECTION, null=True, blank=True, verbose_name='Тип подключения')
     sound_is_ok = models.BooleanField(null=True, verbose_name='Звук ученика')
     date_of_group_start = models.DateField(null=True, blank=True, verbose_name='Дата старта группы')
-    worker = models.ForeignKey(to=AugmentedUser, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Кто выполняет')
+    worker = models.ForeignKey(to=Engineer, on_delete=models.PROTECT, null=True, blank=True, verbose_name='Кто выполняет')
     lead_time = models.PositiveIntegerField(null=True, blank=True, verbose_name='Время выполнения')
     speed_test = models.CharField(max_length=15, null=True, blank=True, verbose_name='Тест скорости')
     speed_test_note = models.CharField(max_length=200, null=True, blank=True, verbose_name='Комментарий к тесту скорости')
@@ -75,4 +75,3 @@ class Appeal(models.Model):
         default_related_name = 'appeals'
 
 
-#TODO: переименовать AugmentedUser в Engineer

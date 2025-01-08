@@ -4,7 +4,7 @@ from . import models
 # Register your models here.
 
 
-@admin.register(models.AugmentedUser)
+@admin.register(models.Engineer)
 class AugmentedUserAdmin(admin.ModelAdmin):
     list_display = ['pk', 'user', 'email', 'token', 'amount_completed_tasks', 'amount_running_tasks']
     list_display_links = ['pk', 'user']

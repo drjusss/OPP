@@ -20,7 +20,7 @@ def update(
     headset: bool | None,
     sound_is_ok: bool | None,
     date_of_group_start: datetime.datetime | None,
-    worker: models.AugmentedUser,
+    worker: models.Engineer,
     to_complete: bool | None = None,
     camera: bool | None = None,
     type: str | None = None,
@@ -93,3 +93,29 @@ def create(name: str, skype: str, message: str) -> models.Appeal:
 
     return appeal
 
+
+def filter(is_completed_filter_value: str, worker_id_filter_value: str, appeal_date_filter_value: str, appeal_type_filter_value: str, search_filter_value: str) -> models.models.QuerySet:
+    appeals = models.Appeal.objects.filter(is_spam=False, is_deleted=False)
+
+    if is_completed_filter_value is not None:
+        is_completed = is_completed_filter_value.lower() == 'true'
+        appeals = appeals.filter(is_completed=is_completed)
+
+    if worker_id_filter_value is not None:
+        worker_pk = int(worker_id_filter_value)
+        appeals = appeals.filter(worker__pk=worker_pk)
+
+    if appeal_date_filter_value is not None:
+        appeal_date = datetime.datetime.strptime(appeal_date_filter_value, '%Y-%m-%d').date()
+        appeals = appeals.filter(date_of_group_start=appeal_date)
+
+    if appeal_type_filter_value is not None:
+        appeals = appeals.filter(type=appeal_type_filter_value)
+
+    if search_filter_value is not None:
+        search_filter_value = search_filter_value.lower()
+        appeals = appeals.filter(pk__icontains=search_filter_value) | appeals.filter(
+            name__icontains=search_filter_value) | appeals.filter(
+            skype__icontains=search_filter_value) | appeals.filter(message__icontains=search_filter_value)
+
+    return appeals

@@ -1,39 +1,12 @@
 import datetime
 import re
 
-from django.http import JsonResponse
 from django.http.request import QueryDict
 
 from apps.api import models
 
 
 headset_value_choices = [choice[0] for choice in models.HEADSET_CHOICES]
-
-
-def validate_augmented_user(email: str) -> None:
-    if re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', email):
-        raise ValueError('Параметр "email" должен быть в формате почты.')
-
-
-def validate_appeal(name: str, skype: str, headset: str, lead_time: int, is_completed: bool) -> None:
-    if not name.isalpha or 3 < len(name) < 20:
-        raise ValueError('Параметр "name", должен состоять только из букв и быть длиной от 3 до 19 символов.')
-
-    if not (5 < len(skype) < 36):
-        raise ValueError('Параметр skype, должен быть в формате логина скайпа и не более 35 символов.')
-
-    headset_choices = [element[0] for element in models.HEADSET_CHOICES]
-    if headset not in headset_choices:
-        raise ValueError(f'Параметр "headset" должен быть одним из - {headset_choices}.')
-
-    if lead_time == 0:
-        raise ValueError('Параметр "lead_time", должен быть не нулевым.')
-
-    if lead_time and not is_completed:
-        raise ValueError('Параметр "is_completed" должен быть установлен "True", если "lead_time" заполнено.')
-
-    if not lead_time and is_completed:
-        raise ValueError('Параметр "is_completed" не может быть выполненным, если не заполнен "lead_time".')
 
 
 def validate_json_to_create_appel(data: list | dict) -> tuple[bool, str]:
@@ -97,7 +70,7 @@ def validate_json_to_change_appeal_complete_status(data: list | dict) -> tuple[b
     return True, str()
 
 
-def validate_data_to_change_appeal_complete_status(appeals: list[models.Appeal | None], to_complete: bool) -> tuple[bool, str]:
+def validate_data_to_change_appeal_complete_status(appeals: list[models.Appeal | None]) -> tuple[bool, str]:
     if None in appeals:
         return False, 'Some appeals does not exist.'
 
@@ -126,7 +99,7 @@ def validate_json_to_delete_or_restore_appeals(data: list | dict) -> tuple[bool,
     return True, str()
 
 
-def validate_data_to_delete_or_restore_appeals(appeals: list[models.Appeal | None], deleted: bool) -> tuple[bool, str]:
+def validate_data_to_delete_or_restore_appeals(appeals: list[models.Appeal | None]) -> tuple[bool, str]:
     if None in appeals:
         return False, 'Some appeals does not exist.'
     return True, str()
@@ -170,7 +143,7 @@ def validate_data_to_update_appeal(
     headset: str | None,
     sound_is_ok: bool | None,
     date_of_group_start: str | None,
-    worker_id: models.AugmentedUser | None,
+    worker_id: models.Engineer | None,
     appeal: models.Appeal | None = None,
     to_complete: bool | None = None,
     camera: bool | None = None,

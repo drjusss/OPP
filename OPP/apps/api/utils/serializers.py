@@ -1,7 +1,7 @@
 from apps.api import models
 
 
-def serialize_augmented_user(augmented_user: models.AugmentedUser) -> dict:
+def serialize_augmented_user(augmented_user: models.Engineer) -> dict:
     return {
         'id': augmented_user.pk,
         'name': augmented_user.name,
@@ -50,7 +50,7 @@ def serialize_appeal_to_unauthorized_user(appeal: models.Appeal) -> dict:
     }
 
 
-def serialize_engineer(engineer: models.AugmentedUser) -> dict:
+def serialize_engineer(engineer: models.Engineer) -> dict:
     return {
         'name': engineer.name,
         'email': engineer.email,

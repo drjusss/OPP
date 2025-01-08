@@ -25,7 +25,7 @@ def appeals(request: HttpRequest) -> HttpResponse:
 
 @decorators.check_authorized_decorator
 def dashboard(request: HttpRequest) -> HttpResponse:
-    augmented_user = models.AugmentedUser.objects.filter(user=request.user).first()  # type: ignore
+    augmented_user = models.Engineer.objects.filter(user=request.user).first()  # type: ignore
     if augmented_user is not None:
         role = 'engineer'
     else:

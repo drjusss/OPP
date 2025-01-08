@@ -11,7 +11,7 @@ from apps.api import models
 def check_authorized_decorator(func: typing.Callable) -> typing.Callable:
     @wraps(func)
     def wrapper(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        if not request.user.is_authenticated:
+        if not request.user.is_authenticated:  # type: ignore
             return JsonResponse(data={'error': 'Not authorized.'}, status=401)
         return func(request=request, *args, **kwargs)
 
@@ -21,7 +21,7 @@ def check_authorized_decorator(func: typing.Callable) -> typing.Callable:
 def check_user_is_engineer(func: typing.Callable) -> typing.Callable:
     @wraps(func)
     def wrapper(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        augmented_user = models.AugmentedUser.objects.filter(user=request.user).first()  # используем filter/first чтобы не нужно было делать try except(т.к. filter/first вернет None при отсутствие значение, в отличии от get, который вернет ошибку)
+        augmented_user = models.Engineer.objects.filter(user=request.user).first()  # type: ignore #используем filter/first чтобы не нужно было делать try except(т.к. filter/first вернет None при отсутствие значение, в отличии от get, который вернет ошибку)
         if augmented_user is not None:
             return func(request=request, *args, **kwargs)
         return JsonResponse(data={'error': 'Permission denied.'}, status=403)
@@ -35,7 +35,7 @@ def validate_json(json_validation_func: typing.Callable, data_validation_func: t
         @wraps(func)
         def wrapper(request: HttpRequest, *args, **kwargs) -> HttpResponse:
             data = json.load(request)
-            # TODO: добавить проверку лишних значений в функциях валидации json
+
             json_is_valid, error_message = json_validation_func(data=data)
             if not json_is_valid:
                 return JsonResponse(data={'error': 'validation error', 'detail': error_message}, status=400)
@@ -100,7 +100,7 @@ def check_object_exist(get_func: typing.Callable) -> typing.Callable:
 
 
 def get_augmented_user_by_token(func: typing.Callable) -> typing.Callable:
-    """При использовании декоратора, сигнатура функции дополняется параметром augmented_user(AugmentedUser)"""
+    """При использовании декоратора, сигнатура функции дополняется параметром augmented_user(Engineer)"""
     @wraps(func)
     def wrapper(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         token = request.GET.get('token')

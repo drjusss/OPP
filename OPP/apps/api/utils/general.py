@@ -12,7 +12,7 @@ def get_data_by_page(data: list[typing.Any], page_id: int, page_size: int) -> li
 
 
 def get_role_by_user(user: User) -> str | None:
-    engineer = models.AugmentedUser.objects.filter(user=user).first()  # type: ignore
+    engineer = models.Engineer.objects.filter(user=user).first()  # type: ignore
     if engineer is not None:
         return 'engineer'
 

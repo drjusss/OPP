@@ -1,6 +1,5 @@
 from django.views import View
 from django.http import HttpRequest, JsonResponse
-from django.db.models import ObjectDoesNotExist
 from django.utils.decorators import method_decorator
 
 from apps.api import models
@@ -11,7 +10,7 @@ from apps.api.utils import decorators
 @method_decorator(name='get', decorator=decorators.check_authorized_decorator)
 class PersonalDataView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
-        engineer = models.AugmentedUser.objects.filter(user=request.user).first()  # type: ignore
+        engineer = models.Engineer.objects.filter(user=request.user).first()  # type: ignore
         manager = models.Manager.objects.filter(user=request.user).first()  # type: ignore
 
         if engineer is not None:
