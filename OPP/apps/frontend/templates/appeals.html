@@ -45,7 +45,7 @@
             </div>
         </div>
 
-        <div class="flex items-center justify-between px-4 gap-12">
+        <div class="flex items-center justify-between px-4 gap-12 mb-4">
             <div class="p-8 gap-6 border-2 border-gray-600 rounded-2xl dark:bg-gray-900 w-full grid grid-cols-6 dark:bg-gray:600">
 
                 <div class="">
@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="flex flex-col items-start">
-                    <label for="appeal-type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Дата</label>
+                    <label for="filter-date-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Дата</label>
                     <input id="filter-date-input" type="date" name="appeal-type" class="rounded-lg px-2 py-2 outline-1 dark:outline-gray-500 outline bg-gray-600 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
                 <div class="flex flex-col items-start col-span-2">
@@ -82,6 +82,19 @@
 
             </div>
             <button type="button" id="export-button" class="border border-solid rounded-lg self-center whitespace-nowrap px-8 py-4 dark:border-gray-500 dark:bg-gray-900 dark:text-gray-400 hover:text-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-gray-300 rounded-t-lg text-xl">Выгрузить обращения</button>
+        </div>
+
+        <div class="flex items-center justify-between px-4 mb-8">
+            <div class="p-4 gap-6 border-2 border-gray-600 rounded-2xl dark:bg-gray-900 w-max grid grid-cols-2 dark:bg-gray:600">
+                <div class="flex flex-col items-start">
+                    <label for="start-date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Дата от</label>
+                    <input id="start-date" type="date" name="appeal-type" class="rounded-lg px-2 py-2 outline-1 dark:outline-gray-500 outline bg-gray-600 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+                <div class="flex flex-col items-start">
+                    <label for="end-date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Дата до</label>
+                    <input id="end-date" type="date" name="appeal-type" class="rounded-lg px-2 py-2 outline-1 dark:outline-gray-500 outline bg-gray-600 text-gray-900 text-xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                </div>
+            </div>
         </div>
 
         <div id="appeal-list" class="grid grid-cols-3 gap-16 px-4 py-8 appeal-id dark:bg-gray-800"></div>
@@ -110,5 +123,3 @@
 
 </body>
 </html>
-
-<!--:TODO -->

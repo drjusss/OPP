@@ -14,6 +14,13 @@ def main_page_view(request: HttpRequest) -> HttpResponse:
     )
 
 
+def page_not_found_view(request: HttpRequest, exception: Exception) -> HttpResponse:
+    return render(
+        request=request,
+        template_name='404.html'
+    )
+
+
 @decorators.check_authorized_decorator
 def appeals(request: HttpRequest) -> HttpResponse:
     role = general.get_role_by_user(user=request.user)  # type: ignore

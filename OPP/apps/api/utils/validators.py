@@ -44,10 +44,6 @@ def validate_json_to_create_appel(data: list | dict) -> tuple[bool, str]:
     return True, str()
 
 
-def validate_data_to_create_appeal(name: str | None, skype: str | None, message: str | None) -> tuple[bool, str]:
-    return True, str()
-
-
 def validate_json_to_change_appeal_complete_status(data: list | dict) -> tuple[bool, str]:
     if not isinstance(data, dict):
         return False, 'Data must be dict type.'
@@ -182,10 +178,6 @@ def validate_json_to_complete_appeal(data: dict | list) -> tuple[bool, str]:
     return True, str()
 
 
-def validate_data_to_complete_appeal(appeal: models.Appeal, to_complete: bool) -> tuple[bool, str]:
-    return True, str()
-
-
 def validate_json_to_delete_appeal(data: dict | list) -> tuple[bool, str]:
     if not isinstance(data, dict):
         return False, 'The Json must be dict type.'
@@ -193,10 +185,6 @@ def validate_json_to_delete_appeal(data: dict | list) -> tuple[bool, str]:
     if data['command'] not in ['delete', 'spam']:
         return False, 'Command value must be one of (delete, spam).'
 
-    return True, str()
-
-
-def validate_data_to_change_delete_and_spam_status(command: str) -> tuple[bool, str]:
     return True, str()
 
 
@@ -244,10 +232,6 @@ def validate_json_to_reset_password(data: dict | list) -> tuple[bool, str]:
     return True, str()
 
 
-def validate_data_to_reset_password(data: dict | list) -> tuple[bool, str]:
-    return True, str()
-
-
 def validate_json_to_update_password(data: dict | list) -> tuple[bool, str]:
     if not isinstance(data, dict):
         return False, 'Data must be dict type.'
@@ -256,10 +240,6 @@ def validate_json_to_update_password(data: dict | list) -> tuple[bool, str]:
         return False, 'Data must contain "password" key'
     if len(data['password']) == 0:
         return False, 'Password cannot be empty.'
-    return True, str()
-
-
-def validate_data_to_update_password(data: dict | list) -> tuple[bool, str]:
     return True, str()
 
 
@@ -272,14 +252,6 @@ def validate_json_for_employee_assignment(data: dict | list) -> tuple[bool, str]
     if data['worker_id'] <= 0 and data['worker_id'] != -1:
         return False, 'worker_id value must be more than 0 or -1 (if you want to remove worker.).'
 
-    return True, str()
-
-
-def validate_data_to_employee_assignment(data: dict | list) -> tuple[bool, str]:
-    return True, str()
-
-
-def validate_query_dict_to_export_appeals(data: QueryDict) -> tuple[bool, str]:
     return True, str()
 
 
@@ -308,5 +280,3 @@ def validate_data_to_export_appeals(data: QueryDict) -> tuple[bool, str]:
             return False, 'date-of-group-start value must be in date format YYYY-mm-dd'
 
     return True, str()
-
-#TODO

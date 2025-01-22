@@ -119,3 +119,8 @@ def filter(is_completed_filter_value: str, worker_id_filter_value: str, appeal_d
             skype__icontains=search_filter_value) | appeals.filter(message__icontains=search_filter_value)
 
     return appeals
+
+
+def filter_appeals_by_date(start_date: datetime, end_date: datetime) -> models.models.QuerySet:
+    appeals = models.Appeal.objects.filter(date_of_create__range=(start_date, end_date))
+    return appeals

@@ -29,7 +29,7 @@ def check_user_is_engineer(func: typing.Callable) -> typing.Callable:
     return wrapper
 
 
-def validate_json(json_validation_func: typing.Callable, data_validation_func: typing.Callable) -> typing.Callable:
+def validate_json(json_validation_func: typing.Callable, data_validation_func: 'typing.Callable | None') -> typing.Callable:
     """При использовании декоратора, сигнатура функции дополняется параметром data(dict | list)"""
     def decorator(func: typing.Callable) -> typing.Callable:
         @wraps(func)
@@ -40,9 +40,10 @@ def validate_json(json_validation_func: typing.Callable, data_validation_func: t
             if not json_is_valid:
                 return JsonResponse(data={'error': 'validation error', 'detail': error_message}, status=400)
 
-            data_is_valid, error_message = data_validation_func(**data)
-            if not data_is_valid:
-                return JsonResponse(data={'error': 'validation error', 'detail': error_message}, status=400)
+            if data_validation_func is not None:
+                data_is_valid, error_message = data_validation_func(**data)
+                if not data_is_valid:
+                    return JsonResponse(data={'error': 'validation error', 'detail': error_message}, status=400)
 
             return func(request=request, data=data, *args, **kwargs)
 
@@ -50,16 +51,16 @@ def validate_json(json_validation_func: typing.Callable, data_validation_func: t
     return decorator
 
 
-def validate_get_request_to_export_appeals(query_params_validation_func: typing.Callable, data_validation_func: typing.Callable) -> typing.Callable:
+def validate_get_request_to_export_appeals(query_params_validation_func: 'typing.Callable | None', data_validation_func: typing.Callable) -> typing.Callable:
     """При использовании декоратора, сигнатура функции дополняется параметром data(dict | list)"""
     def decorator(func: typing.Callable) -> typing.Callable:
         @wraps(func)
         def wrapper(request: HttpRequest, *args, **kwargs) -> HttpResponse:
+            if query_params_validation_func is not None:
+                query_params_is_valid, error_message = query_params_validation_func(request.GET)
 
-            query_params_is_valid, error_message = query_params_validation_func(request.GET)
-
-            if not query_params_is_valid:
-                return HttpResponse(content={'error': 'validation error', 'detail': error_message}, status=400)
+                if not query_params_is_valid:
+                    return HttpResponse(content={'error': 'validation error', 'detail': error_message}, status=400)
 
             data_is_valid, error_message = data_validation_func(request.GET)
             if not data_is_valid:

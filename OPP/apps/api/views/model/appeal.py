@@ -13,17 +13,32 @@ from apps.api import models
 @method_decorator(name='get', decorator=decorators.check_authorized_decorator)
 @method_decorator(name='delete', decorator=decorators.check_authorized_decorator)
 @method_decorator(name='delete', decorator=decorators.check_user_is_engineer)
-@method_decorator(name='post', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_create_appel, data_validation_func=validators.validate_data_to_create_appeal))
+@method_decorator(name='post', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_create_appel, data_validation_func=None))
 @method_decorator(name='delete', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_delete_or_restore_appeals, data_validation_func=validators.validate_data_to_delete_or_restore_appeals))
 class AppealsApiView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
-        appeals = models.Appeal.objects.filter(is_deleted=False, is_spam=False).order_by('-pk')  # order_by - отсортировать по, добавить фильтр на is_spam=False
+        start_date = request.GET.get('start-date')
+        if start_date is None:
+            return JsonResponse(data=list(), safe=False, status=200)
 
-        page_size = int(request.GET.get('page-size', default=100))
-        page_id = int(request.GET.get('page-id', default=1))
-        appeals_by_page = general_utils.get_data_by_page(data=appeals, page_id=page_id, page_size=page_size)  # пагинация
+        try:
+            start_date_object = datetime.datetime.strptime(start_date, '%Y-%m-%d')
+        except ValueError:
+            return JsonResponse(data={'error': 'Invalid date format of start_date param'}, status=400)
 
-        response_data = [serializers.serialize_appeal(appeal=appeal) for appeal in appeals_by_page]
+        end_date = request.GET.get('end-date')
+        if end_date is None:
+            return JsonResponse(data=list(), safe=False, status=200)
+
+        try:
+            end_date_object = datetime.datetime.strptime(end_date, '%Y-%m-%d')
+            # end_date_object = end_date_object.replace(hour=23, minute=59, second=59)  # если было поле DateTimeField
+        except ValueError:
+            return JsonResponse(data={'error': 'Invalid date format of end_date param'}, status=400)
+
+        appeals_by_date = appeal_utils.filter_appeals_by_date(start_date=start_date_object, end_date=end_date_object)
+
+        response_data = [serializers.serialize_appeal(appeal=appeal) for appeal in appeals_by_date]
         return JsonResponse(data=response_data, safe=False, status=200)  # Если передаёшь список в качестве джейсона, то нужно указывать safe=False.
 
     def post(self, request: HttpRequest, data: dict | list) -> HttpResponse:
@@ -52,7 +67,7 @@ class AppealsApiView(View):
 @method_decorator(name='put', decorator=decorators.check_user_is_engineer)
 @method_decorator(name='delete', decorator=decorators.check_user_is_engineer)
 @method_decorator(name='put', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_update_appeal, data_validation_func=validators.validate_data_to_update_appeal))
-@method_decorator(name='delete', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_delete_appeal, data_validation_func=validators.validate_data_to_change_delete_and_spam_status))
+@method_decorator(name='delete', decorator=decorators.validate_json(json_validation_func=validators.validate_json_to_delete_appeal, data_validation_func=None))
 @method_decorator(name='dispatch', decorator=decorators.check_object_exist(get_func=appeal_utils.get))
 class AppealApiView(View):
     def get(self, request: HttpRequest, appeal: models.Appeal) -> HttpResponse:
@@ -109,7 +124,7 @@ class FixiksApiView(View):
 
 @method_decorator(name='get', decorator=decorators.check_authorized_decorator)
 @method_decorator(name='get', decorator=decorators.check_user_is_engineer)
-@method_decorator(name='get', decorator=decorators.validate_get_request_to_export_appeals(query_params_validation_func=validators.validate_query_dict_to_export_appeals, data_validation_func=validators.validate_data_to_export_appeals))
+@method_decorator(name='get', decorator=decorators.validate_get_request_to_export_appeals(query_params_validation_func=None, data_validation_func=validators.validate_data_to_export_appeals))
 class ExportAppealsToCSVView(View):
     def get(self, request: HttpRequest) -> FileResponse:
         os_type = request.GET.get('os', 'windows')
@@ -153,4 +168,6 @@ class ExportAppealsToCSVView(View):
 
 
 #TODO: отрефакторить бэк
-#TODO: пагинация? удалить validate_data которые ничего не делают
+#TODO: пагинация?
+
+#TODO:

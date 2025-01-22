@@ -1,0 +1,18 @@
+input[type="checkbox"] {
+    position: relative;
+}
+
+input[type="checkbox"]:checked::before {
+    content: '✔'; /* Галочка */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px; /* Размер галочки */
+    color: white; /* Цвет галочки */
+}
+
+.scrollbar-none {
+    scrollbar-width: none;
+}
+
