@@ -6,7 +6,7 @@ from django.http import HttpRequest, HttpResponse, JsonResponse, FileResponse
 from django.utils.decorators import method_decorator
 
 from apps.api.utils.model import appeal as appeal_utils, augmented_user as augmented_user_utils
-from apps.api.utils import general as general_utils, serializers, decorators, validators
+from apps.api.utils import serializers, decorators, validators
 from apps.api import models
 
 
@@ -18,26 +18,14 @@ from apps.api import models
 class AppealsApiView(View):
     def get(self, request: HttpRequest) -> JsonResponse:
         start_date = request.GET.get('start-date')
-        if start_date is None:
-            return JsonResponse(data=list(), safe=False, status=200)
-
-        try:
-            start_date_object = datetime.datetime.strptime(start_date, '%Y-%m-%d')
-        except ValueError:
-            return JsonResponse(data={'error': 'Invalid date format of start_date param'}, status=400)
-
         end_date = request.GET.get('end-date')
-        if end_date is None:
-            return JsonResponse(data=list(), safe=False, status=200)
 
-        try:
-            end_date_object = datetime.datetime.strptime(end_date, '%Y-%m-%d')
-            # end_date_object = end_date_object.replace(hour=23, minute=59, second=59)  # если было поле DateTimeField
-        except ValueError:
-            return JsonResponse(data={'error': 'Invalid date format of end_date param'}, status=400)
+        start_date_is_valid, content = appeal_utils.check_date_format(start_date=start_date, end_date=end_date)
+        if not start_date_is_valid:
+            return JsonResponse(data={'error': 'Validation error', 'detail': content}, status=400)
+        start_date_object, end_date_object = content
 
         appeals_by_date = appeal_utils.filter_appeals_by_date(start_date=start_date_object, end_date=end_date_object)
-
         response_data = [serializers.serialize_appeal(appeal=appeal) for appeal in appeals_by_date]
         return JsonResponse(data=response_data, safe=False, status=200)  # Если передаёшь список в качестве джейсона, то нужно указывать safe=False.
 
@@ -126,7 +114,7 @@ class FixiksApiView(View):
 @method_decorator(name='get', decorator=decorators.check_user_is_engineer)
 @method_decorator(name='get', decorator=decorators.validate_get_request_to_export_appeals(query_params_validation_func=None, data_validation_func=validators.validate_data_to_export_appeals))
 class ExportAppealsToCSVView(View):
-    def get(self, request: HttpRequest) -> FileResponse:
+    def get(self, request: HttpRequest) -> FileResponse | JsonResponse:
         os_type = request.GET.get('os', 'windows')
 
         if os_type == 'windows':
@@ -134,16 +122,26 @@ class ExportAppealsToCSVView(View):
         else:
             os_type_encoding = 'utf-8'
 
+        start_date = request.GET.get('start-date')
+        end_date = request.GET.get('end-date')
+
+        start_date_is_valid, content = appeal_utils.check_date_format(start_date=start_date, end_date=end_date)
+        if not start_date_is_valid:
+            return JsonResponse(data={'error': 'Validation error', 'detail': content}, status=400)
+        start_date_object, end_date_object = content
+
         now = datetime.datetime.now()
         verbose_now = datetime.datetime.strftime(now, format='%d.%m.%Y %H.%M.%S')
         file_name = f'./export/{verbose_now}.csv'
 
-        filtered_appeals = appeal_utils.filter(
+        filtered_appeals = appeal_utils.filter_query_set(
             is_completed_filter_value=request.GET.get('is-completed'),
             worker_id_filter_value=request.GET.get('worker-id'),
             appeal_type_filter_value=request.GET.get('appeal-type'),
             appeal_date_filter_value=request.GET.get('appeal-date'),
             search_filter_value=request.GET.get('search'),
+            start_date=start_date_object,
+            end_date=end_date_object,
         )
 
         appeals = list(filtered_appeals)
@@ -169,5 +167,4 @@ class ExportAppealsToCSVView(View):
 
 #TODO: отрефакторить бэк
 #TODO: пагинация?
-
 #TODO:

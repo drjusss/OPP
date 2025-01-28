@@ -94,8 +94,8 @@ def create(name: str, skype: str, message: str) -> models.Appeal:
     return appeal
 
 
-def filter(is_completed_filter_value: str, worker_id_filter_value: str, appeal_date_filter_value: str, appeal_type_filter_value: str, search_filter_value: str) -> models.models.QuerySet:
-    appeals = models.Appeal.objects.filter(is_spam=False, is_deleted=False)
+def filter_query_set(is_completed_filter_value: str, worker_id_filter_value: str, appeal_date_filter_value: str, appeal_type_filter_value: str, search_filter_value: str, start_date: datetime, end_date:datetime) -> models.models.QuerySet:
+    appeals = models.Appeal.objects.filter(is_spam=False, is_deleted=False, date_of_create__range=(start_date, end_date))
 
     if is_completed_filter_value is not None:
         is_completed = is_completed_filter_value.lower() == 'true'
@@ -124,3 +124,21 @@ def filter(is_completed_filter_value: str, worker_id_filter_value: str, appeal_d
 def filter_appeals_by_date(start_date: datetime, end_date: datetime) -> models.models.QuerySet:
     appeals = models.Appeal.objects.filter(date_of_create__range=(start_date, end_date))
     return appeals
+
+
+def check_date_format(start_date: str, end_date: str) -> [bool, 'str | [datetime.datetime, datetime.datetime]']:
+    if start_date is None:
+        return False, 'start_date undefined'
+    if end_date is None:
+        return False, 'end_date undefined'
+
+    try:
+        start_date_object = datetime.datetime.strptime(start_date, '%Y-%m-%d')
+    except ValueError:
+        return False, 'Invalid date format of start_date param'
+    try:
+        end_date_object = datetime.datetime.strptime(end_date, '%Y-%m-%d')
+    except ValueError:
+        return False, 'Invalid date format of end_date param'
+
+    return True, [start_date_object, end_date_object]
