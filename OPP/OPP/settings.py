@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-oz##&)=rx8406t^=u3#*+wmbd++(7zu^hp_6adwnt#@-#aqtg*
 DEBUG = False
 PRODUCTION = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'studappeals.tricolor.ru']
 
 
 # Application definition
