@@ -31,8 +31,8 @@ class Engineer(models.Model):
     token = models.CharField(null=True, blank=True, unique=True, max_length=16, verbose_name='Токен')
 
     class Meta:
-        verbose_name = 'Расширенный пользователь'
-        verbose_name_plural = 'Расширенные пользователи'
+        verbose_name = 'Инженер'
+        verbose_name_plural = 'Инженеры'
         db_table = 'augmented_user'
 
 

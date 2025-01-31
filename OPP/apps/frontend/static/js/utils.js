@@ -4,7 +4,7 @@ function getCookie(name) {
   return null;
 }
 
-const domain = 'http://localhost:8000';
+const domain = 'https://studappeals.tricolor.ru';
 const loginUrl = `${domain}/auth/sign-in/`
 
 function showPassword() {

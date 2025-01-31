@@ -450,9 +450,12 @@ function getValuesToUpdateAppeal() {
 }
 
 function addExportButtonHandler() {
-    const exportButton = document.querySelector('#export-button')
+    const exportButton = document.querySelector('#export-button');
+
     exportButton.addEventListener('click', () => {
-        sendRequestToExportAppeals(filterAppealsToExport())
+        const startDate = document.querySelector('#start-date').value;
+        const endDate = document.querySelector('#end-date').value;
+        sendRequestToExportAppeals(filterAppealsToExport(), startDate, endDate)
     })
 }
 
@@ -479,6 +482,3 @@ getPersonalData()
 
 
 //setTimeout(filterAppeals, 2000)  // установить таймер для обработки функции, в милисекундах
-
-// TODO убрать повторяющиеся функции в utils
-// TODO

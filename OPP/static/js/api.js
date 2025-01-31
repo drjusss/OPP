@@ -69,9 +69,9 @@ function sendRequestToGetAppeals(successfulHandler, startDate, endDate) {
     })
 }
 
-function sendRequestToExportAppeals(filterAppeals) {
+function sendRequestToExportAppeals(filterAppeals, startDate, endDate) {
     const {isCompleted, workerId, appealType, appealDate, search} = filterAppeals
-    let url = `${domain}/api/export/?`
+    let url = `${domain}/api/export/?start-date=${startDate}&end-date=${endDate}`
 
     if (isCompleted) {
         url = `${url}&is-completed=${isCompleted}`

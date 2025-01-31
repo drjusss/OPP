@@ -26,7 +26,8 @@ class AppealsApiView(View):
         start_date_object, end_date_object = content
 
         appeals_by_date = appeal_utils.filter_appeals_by_date(start_date=start_date_object, end_date=end_date_object)
-        response_data = [serializers.serialize_appeal(appeal=appeal) for appeal in appeals_by_date]
+        filtered_appeals = appeals_by_date.filter(is_spam=False, is_completed=False)
+        response_data = [serializers.serialize_appeal(appeal=appeal) for appeal in filtered_appeals]
         return JsonResponse(data=response_data, safe=False, status=200)  # Если передаёшь список в качестве джейсона, то нужно указывать safe=False.
 
     def post(self, request: HttpRequest, data: dict | list) -> HttpResponse:
@@ -163,3 +164,5 @@ class ExportAppealsToCSVView(View):
         response = FileResponse(open(file=file_name, mode='rb'))  # as_attachment чтобы дать понять что мы отправляем файл, который нужно скачать
 
         return response
+
+#TODO: протестировать на проде все изменения
