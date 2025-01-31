@@ -163,8 +163,3 @@ class ExportAppealsToCSVView(View):
         response = FileResponse(open(file=file_name, mode='rb'))  # as_attachment чтобы дать понять что мы отправляем файл, который нужно скачать
 
         return response
-
-
-#TODO: отрефакторить бэк
-#TODO: пагинация?
-#TODO:
